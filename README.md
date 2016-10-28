@@ -1,1 +1,0 @@
-# student_salary_visualiation
