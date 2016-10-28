@@ -28,6 +28,8 @@
         // discipline_option[9]=["其他學門"];
 
 
+var margin = {top: 10, right: 0, bottom: 140, left: 0};
+var width = 800 , height = 450, padding = 30, barMargin = 5, axisPadding = 80;
 
 
 jQuery(document).ready(function()
@@ -62,7 +64,126 @@ function Page_Init()
         subjectNumber = $.trim($('#discipline option:selected').val());
             // disciplineChange();
     });
-    d3.csv("")
+    d3.csv("data/data.csv", function(error, data){
+        if (error){
+            console.log(error);
+        }
+        console.log("data/data_" + subjectNumber +  ".csv");
+        if(data){
+            $("#tip").text("以下的資訊以新台幣(NTD)為單位");
+        }
+        //let it do not look so big
+        if(data.length === 1 ){
+            width = 1000/4;
+        }
+
+        var yMax = d3.max(data, function(d){return parseInt(d.university_salary);});
+        var yMin = d3.min(data, function(d){
+            if(d.university_salary != 0){
+                return parseInt(d.university_salary);
+            }
+        });
+        var xScale = d3.scale.linear()
+                        .domain([0, data.length])
+                        .range([padding + axisPadding, width + axisPadding - margin.left - margin.right - padding]);
+        //to handle the problem that having only one data
+        var yScale = data.length == 1 ?
+                        d3.scale.linear()
+                            .domain([0, yMax])
+                            .range([padding, height - margin.top - margin.bottom - padding]):
+                        d3.scale.linear()
+                            .domain([yMin, yMax])
+                            .range([padding, height - margin.top - margin.bottom - padding]);
+        var yScale2 =   d3.scale.linear()
+                            .domain([yMin, yMax])
+                            .range([height - margin.top - margin.bottom - padding, padding]);
+
+//        var barWidth = (width - padding * 2) / data.length - barMargin;
+
+        var svg = d3.select(".chart").append("svg")
+                                    .attr("width", width + axisPadding)
+                                    .attr("height", height);
+        //yAxis
+
+        var yAxis = d3.svg.axis()
+                            .scale(yScale2)
+                            .tickSize(1)
+                            .orient('left');
+        svg.append("g")
+            .attr({
+                "class": "yAxis",
+                "transform": "translate(" + axisPadding +",0)"
+            })
+            .call(yAxis)
+            .append("text")
+            .attr({
+                "text-anchor": "start",
+            });
+        //bar chart
+        var bar = svg.selectAll(".point")
+                    .data(data)
+                    .enter()
+                    .append("circle")
+                    .attr('class', 'point');
+        var color = d3.scale.category20b();
+            bar.attr({
+                "fill": function(d, i){
+                    if(d.university_salary === 0){
+                        return "#202020";
+                    }
+                    return color(parseInt(d.code / 100));
+                },
+                "cx": function(d, i){
+                    return xScale(i);
+                },
+                "cy": height - margin.top - margin.bottom,
+//                    "width": barWidth,
+//                    "height": 0,
+                "r": function(d) {
+                    if(d.university_salary == 0 ){
+                        return 0;
+                    }else{
+                        return Math.sqrt(yScale(d.university_salary));
+                    }
+                },
+                "opacity": 0.5,
+                "id": function(d){
+                    return "id" + parseInt(d.code / 100);
+                },
+                })
+            .on("click", function(){
+                var setNumber = d3.select(this).property("id");
+                var setOpa = d3.select(this).attr("opacity");
+//                     console.log(setNumber);
+//                     console.log(setOpa);
+                if(d3.select(this).attr("opacity") == 0.5){
+                    d3.selectAll("#" + setNumber).attr({
+                        "opacity": "0.9",
+                    });
+                }else if(d3.select(this).attr("opacity") == 0.9){
+                    d3.selectAll("#" + setNumber).attr({
+                        "opacity": "0.5",
+                        "border": "none",
+//                        "border-radius": "99em",
+                    });
+                }
+            })
+            .transition()
+            .duration(1000)
+            .attr({
+                "cy": function(d){
+                    if(d.university_salary != 0){
+                        return height - margin.top - margin.bottom - yScale(d.university_salary);
+                    }
+                },
+//                    "height": function(d){
+//                        if(d.university_salary == 0){
+//                            return 0;
+//                        }
+//                        return yScale(d.university_salary);
+//                    }
+            });
+    });
 }
 
 function fieldChange(){
@@ -120,14 +241,10 @@ function updataDisciplineName(data){
     }
     return temp;
 }
-//
-var margin = {top: 10, right: 0, bottom: 140, left: 0};
-var width = 800 , height = 450, padding = 30, barMargin = 5;
 window.onload = function(){
     //create json along with json
     document.getElementById("search").onclick = function() {
         d3.selectAll("#selectSubject").remove();
-        $("#tip").text("以下的資訊以新台幣(NTD)為單位");
     // d3.selectAll(".xAxis").remove();
     // var selectDepartment;
     // d3.csv("data/data_" + subjectNumber + ".csv" , function(error, json){
@@ -187,7 +304,11 @@ window.onload = function(){
             if (error){
             console.log(error);
         }
-        //let it do not look so big
+            console.log("data/data_" + subjectNumber +  ".csv");
+            if(data){
+                $("#tip").text("以下的資訊以新台幣(NTD)為單位");
+            }
+            //let it do not look so big
             if(data.length === 1 ){
                 width = 1000/4;
             }
@@ -213,9 +334,9 @@ window.onload = function(){
             var barWidth = (width - padding * 2) / data.length - barMargin;
 
 
-            data = data.sort(function(a, b) {
-                return d3.descending(parseFloat(a.university_salary), parseFloat(b.university_salary));
-            });
+//            data = data.sort(function(a, b) {
+//                return d3.descending(parseFloat(a.university_salary), parseFloat(b.university_salary));
+//            });
 
 
             var svg = d3.select(".chart").append("svg")
@@ -225,31 +346,38 @@ window.onload = function(){
             var bar = svg.selectAll("rect")
                         .data(data)
                         .enter()
-                        .append("rect");
+                        .append("circle");
             var color = d3.scale.category20b();
                 bar.attr({
                     "fill": function(d, i){
                         if(d.university_salary === 0){
                             return "#202020";
                         }
-                        return color(i);
+                        return color(parseInt(d.code / 100));
                     },
-                    "x": function(d, i){
+                    "cx": function(d, i){
                         return xScale(i);
                     },
-                    "y": height - margin.top - margin.bottom,
-                    "width": barWidth,
-                    "height": 0,
+                    "cy": height - margin.top - margin.bottom,
+//                    "width": barWidth,
+//                    "height": 0,
+                    "r": function(d) {
+                        if(d.university_salary == 0 ){
+                            return 0;
+                        }else{
+                            return Math.sqrt(yScale(d.university_salary));
+                        }
+                    },
                     "opacity": 0.5,
                     "id": function(d){
-                        return "id" + d.discipline;
+                        return "id" + parseInt(d.code / 100);
                     }
                     })
                 .on("click", function(){
                     var setNumber = d3.select(this).property("id");
                     var setOpa = d3.select(this).attr("opacity");
-                    // console.log(setNumber);
-                    // console.log(setOpa);
+//                     console.log(setNumber);
+//                     console.log(setOpa);
                     if(d3.select(this).attr("opacity") == 0.5){
                         d3.selectAll("#" + setNumber).attr("opacity", 1);
                     }else if(d3.select(this).attr("opacity") == 1){
@@ -259,17 +387,17 @@ window.onload = function(){
                 .transition()
                 .duration(1000)
                 .attr({
-                    "y": function(d){
+                    "cy": function(d){
                         if(d.university_salary != 0){
                             return height - margin.top - margin.bottom - yScale(d.university_salary);
                         }
                     },
-                    "height": function(d){
-                        if(d.university_salary == 0){
-                            return 0;
-                        }
-                        return yScale(d.university_salary);
-                    }
+//                    "height": function(d){
+//                        if(d.university_salary == 0){
+//                            return 0;
+//                        }
+//                        return yScale(d.university_salary);
+//                    }
                 });
 
             var barTooltip = bar.append("title")
@@ -280,63 +408,64 @@ window.onload = function(){
 
                 //TEXT and test
 
-            svg.selectAll("text")
-                .data(data)
-                .enter()
-                .append("text")
-                .text(function(d){
-                    if(d.university_salary == 0){
-                        return "NoData";
-                    }
-                    return d.university_salary;
-                })
-                .attr({
-                    "x": function(d,i){
-                        return xScale(i);
-                    },
-                    "y": height - margin.top - margin.bottom,
-                    "fill": "black",
-                    "text-anchor": "center",
-                    "font-size": "16px",
-                })
-                .transition()
-                .duration(1000)
-                .attr({
-                    "y": function(d){
-                        if(d.university_salary != 0 ){
-                            return height - margin.top - margin.bottom - yScale(d.university_salary)  - 5;
-                        }else{
-                            return height - margin.top - margin.bottom;
-                        }
-                    }
-                });
-            //x axis
-            var disciplineName = updataDisciplineName(data);
-            var xAxisTick = d3.svg.axis()
-                        .scale(xScale)
-                        .tickFormat(function(d,i) { return disciplineName[i]; })
-                        .tickSize(0)
-                        .ticks(data.length)
-                        .orient("bottom");
-
-            svg.append("g")
-                .attr({
-                    "class": "xAxis",
-                    "transform": "translate(" + (barWidth/2) + "," + (height - margin.top - margin.bottom) + ")"
-                })
-                .call(xAxisTick)
-                .selectAll("text")
-                .style({
-                    "font-size": "14px",
-                    "text-anchor": "start",
-                    "letter-spacing": "1px",
-//                    "transform": "rotate(20deg)",
-                    "color": "#666666"
-                })
-                .attr({
-                    "writing-mode": "vertical-lr",
-                    "transform": "rotate(30)"
-                });
+//            svg.selectAll("text")
+//                .data(data)
+//                .enter()
+//                .append("text")
+//                .text(function(d){
+//                    if(d.university_salary == 0){
+//                        return "NoData";
+//                    }
+//                    return d.university_salary;
+//                })
+//                .attr({
+//                    "x": function(d,i){
+//                        return xScale(i);
+//                    },
+//                    "y": height - margin.top - margin.bottom,
+//                    "fill": "black",
+//                    "text-anchor": "center",
+//                    "font-size": "16px",
+////                    "visibility": "hide",
+//                })
+//                .transition()
+//                .duration(1000)
+//                .attr({
+//                    "y": function(d){
+//                        if(d.university_salary != 0 ){
+//                            return height - margin.top - margin.bottom - yScale(d.university_salary)  - 5;
+//                        }else{
+//                            return height - margin.top - margin.bottom;
+//                        }
+//                    }
+//                });
+//            //x axis
+//            var disciplineName = updataDisciplineName(data);
+//            var xAxisTick = d3.svg.axis()
+//                        .scale(xScale)
+//                        .tickFormat(function(d,i) { return disciplineName[i]; })
+//                        .tickSize(0)
+//                        .ticks(data.length)
+//                        .orient("bottom");
+//
+//            svg.append("g")
+//                .attr({
+//                    "class": "xAxis",
+//                    "transform": "translate(" + (barWidth/2) + "," + (height - margin.top - margin.bottom) + ")"
+//                })
+//                .call(xAxisTick)
+//                .selectAll("text")
+//                .style({
+//                    "font-size": "14px",
+//                    "text-anchor": "start",
+//                    "letter-spacing": "1px",
+////                    "transform": "rotate(20deg)",
+//                    "color": "#666666"
+//                })
+//                .attr({
+//                    "writing-mode": "vertical-lr",
+//                    "transform": "rotate(30)"
+//                });
         // function updataData(data,indicator){
         //     var result=[];
         //     for (var foo in data){
