@@ -64,6 +64,7 @@ function Page_Init()
         subjectNumber = $.trim($('#discipline option:selected').val());
             // disciplineChange();
     });
+    window.onload = function(){
     d3.csv("data/data.csv", function(error, data){
         if (error){
             console.log(error);
@@ -184,6 +185,7 @@ function Page_Init()
 //                    }
             });
     });
+}
 }
 
 function fieldChange(){
