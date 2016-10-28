@@ -1,0 +1,18 @@
+[
+    {
+        "disciplineId": "1",
+        "disciplineName": "民生"
+    },
+    {
+        "disciplineId": "2",
+        "disciplineName": "運輸服務"
+    },
+    {
+        "disciplineId": "3",
+        "disciplineName": "環境保護"
+    },
+    {
+        "disciplineId": "4",
+        "disciplineName": "軍營國防安全"
+    }
+]

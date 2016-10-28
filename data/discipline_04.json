@@ -1,0 +1,18 @@
+[
+    {
+        "disciplineId": "1",
+        "disciplineName": "生命科學"
+    },
+    {
+        "disciplineId": "2",
+        "disciplineName": "自然科學"
+    },
+    {
+        "disciplineId": "3",
+        "disciplineName": "數學及統計"
+    },
+    {
+        "disciplineId": "4",
+        "disciplineName": "電算機"
+    }
+]
