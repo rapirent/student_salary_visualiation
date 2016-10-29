@@ -59,6 +59,8 @@ window.onload = function(){
 };
 function pageInitUniversity(){
     d3.selectAll("svg").remove();
+    d3.selectAll("#checkAverage").checked = false;
+    d3.selectAll("#checkSort").checked = false;
     d3.csv("data/data.csv", function(error, data){
         if (error){
             console.log(error);
@@ -284,7 +286,7 @@ function pageInitUniversity(){
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(47300 + 10000),
+                "y": yScale2(yMax + 1000),
                 "dy": ".35em",
                 "id": "averageText",
                 "opacity": 0,
@@ -347,6 +349,8 @@ function pageChangeUniversity(selectNumber) {
     d3.selectAll("#selectSubject").remove();
 // d3 to visualize
     d3.selectAll("svg").remove();
+    d3.selectAll("#checkAverage").checked = false;
+    d3.selectAll("#checkSort").checked = false;
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
@@ -696,13 +700,11 @@ function pageChangeUniversity(selectNumber) {
 };
 function pageInitMaster(){
     d3.selectAll("svg").remove();
+    d3.selectAll("#checkAverage").checked = false;
+    d3.selectAll("#checkSort").checked = false;
     d3.csv("data/data.csv", function(error, data){
         if (error){
             console.log(error);
-        }
-        //let it do not look so big
-        if(data.length === 1 ){
-            width = 1000/4;
         }
 
         var yMax = d3.max(data, function(d){return parseInt(d.master_salary);});
@@ -925,7 +927,7 @@ function pageInitMaster(){
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(47300 + 10000),
+                "y": yScale2(yMax + 1000),
                 "dy": ".35em",
                 "id": "averageText",
                 "opacity": 0,
@@ -986,8 +988,10 @@ function pageInitMaster(){
 function pageChangeMaster(selectNumber) {
     selectNumber = selectNumber.slice(2);
     d3.selectAll("#selectSubject").remove();
-// d3 to visualize
     d3.selectAll("svg").remove();
+    d3.selectAll("#checkAverage").checked = false;
+    d3.selectAll("#checkSort").checked = false;
+// d3 to visualize
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
