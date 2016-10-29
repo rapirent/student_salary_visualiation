@@ -22,7 +22,7 @@
 var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
 var width = 800 + axisPadding + legendPadding;
-var changed = false, setNumber;
+var changed = false, setChangeNumber;
 //used to filter JSON and choose what to display
 //it will return values whose id is selected key in json
 function filterJSON(json, key, value) {
@@ -50,9 +50,9 @@ window.onload = function(){
         }else if(this.value === "master" && changed === false){
             pageInitMaster();
         }else if(this.value === "university" && changed === true){
-            pageChangeUniversity(setNumber);
+            pageChangeUniversity(setChangeNumber);
         }else if(this.value === "master" && changed === true){
-            pageChangeMaster(setNumber)
+            pageChangeMaster(setChangeNumber)
         }
     });
     pageInitUniversity();
@@ -166,7 +166,7 @@ function pageInitUniversity(){
                 },
                 })
             .on("mouseover", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var selectClass = d3.select(this).attr("class");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.9,
@@ -176,7 +176,7 @@ function pageInitUniversity(){
                 $(".info").empty().text(selectClass);
             })
             .on("mouseout", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
                         "opacity": 0.5,
                         "stroke": "rgba(0, 0, 0, 0.12)",
@@ -184,9 +184,9 @@ function pageInitUniversity(){
                 });
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                setChangeNumber = d3.select(this).property("id");
                 changed = true;
-                pageChangeUniversity(setNumber);
+                pageChangeUniversity(setChangeNumber);
             })
             .transition()
             .duration(1000)
@@ -233,7 +233,7 @@ function pageInitUniversity(){
                     },
                 })
             .on("mouseover", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var selectClass = d3.select(this).attr("class");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.9,
@@ -243,7 +243,7 @@ function pageInitUniversity(){
                 $(".info").empty().text(selectClass);
             })
             .on("mouseout", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.5,
                     "stroke": "rgba(0, 0, 0, 0.12)",
@@ -251,9 +251,9 @@ function pageInitUniversity(){
                 });
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                setChangeNumber = d3.select(this).property("id");
                 changed = true;
-                pageChangeUniversity(setNumber);
+                pageChangeUniversity(setChangeNumber);
             })
         legend.append("text")
                 .attr({
@@ -465,7 +465,7 @@ function pageChangeUniversity(selectNumber) {
             }
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var setOpa = d3.select(this).attr("opacity");
                 if(d3.select(this).attr("opacity") == 0.5 || d3.select(this).attr("opacity") == 0.2){
                     bar.attr({
@@ -807,7 +807,7 @@ function pageInitMaster(){
                 },
                 })
             .on("mouseover", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var selectClass = d3.select(this).attr("class");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.9,
@@ -817,7 +817,7 @@ function pageInitMaster(){
                 $(".info").empty().text(selectClass);
             })
             .on("mouseout", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
                         "opacity": 0.5,
                         "stroke": "rgba(0, 0, 0, 0.12)",
@@ -825,9 +825,9 @@ function pageInitMaster(){
                 });
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                setChangeNumber = d3.select(this).property("id");
                 changed = true;
-                pageChangeMaster(setNumber);
+                pageChangeMaster(setChangeNumber);
             })
             .transition()
             .duration(1000)
@@ -874,7 +874,7 @@ function pageInitMaster(){
                     },
                 })
             .on("mouseover", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var selectClass = d3.select(this).attr("class");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.9,
@@ -884,7 +884,7 @@ function pageInitMaster(){
                 $(".info").empty().text(selectClass);
             })
             .on("mouseout", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.5,
                     "stroke": "rgba(0, 0, 0, 0.12)",
@@ -892,9 +892,9 @@ function pageInitMaster(){
                 });
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                setChangeNumber = d3.select(this).property("id");
                 changed = true;
-                pageChangeMaster(setNumber);
+                pageChangeMaster(setChangeNumber);
             })
         legend.append("text")
                 .attr({
@@ -1106,7 +1106,7 @@ function pageChangeMaster(selectNumber) {
             }
             })
             .on("click", function(){
-                setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id");
                 var setOpa = d3.select(this).attr("opacity");
                 if(d3.select(this).attr("opacity") == 0.5 || d3.select(this).attr("opacity") == 0.2){
                     bar.attr({
