@@ -75,25 +75,6 @@ function fieldChange(){
     }
 }
 
-    // function disciplineChange(){
-
-    //     $('#subject').empty().append($('<option></option>').val('').text("請選擇學類"));
-
-    //     var fieldNumber = $.trim($('#field option:selected').val());
-    //     var disciplineNumber = $.trim($('#discipline option:selected').val());
-
-    //     console.log('data/subject_0'+ fieldNumber + disciplineNumber + '.json')
-    //     if(fieldNumber.length != 0  && disciplineNumber.length!=0){
-    //         $.getJSON('data/subject_0'+ fieldNumber + disciplineNumber + '.json', function(data){
-    //             $.each(data, function(i, item){
-    //                 $('#subject').append(
-    //                             $('<option></option>').val(item.subjectId)
-    //                                                 .text(item.subjectName)
-    //                                     );
-    //             });
-    //         });
-    //     }
-    // };
 //used to filter JSON and choose what to display
 //it will return values whose id is selected key in json
 function filterJSON(json, key, value) {
@@ -119,9 +100,9 @@ window.onload = function(){
             console.log(error);
         }
         console.log("data/data_" + subjectNumber +  ".csv");
-        if(data){
-            $("#tip").text("以下的資訊以新台幣(NTD)為單位");
-        }
+//        if(data){
+//            $("#tip").text("以下的資訊以新台幣(NTD)為單位");
+//        }
         //let it do not look so big
         if(data.length === 1 ){
             width = 1000/4;
@@ -153,8 +134,34 @@ window.onload = function(){
         var svg = d3.select(".chart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height);
-        //yAxis
+        //sorted data
+//        console.log(data);
+//        var sortData = [];
+//        for(foo in data){
+//            sortData.push(data[foo]);
+//        }
+//        console.log(sortData);
+//        sortData = sortData.sort(function(a, b) {
+//            return d3.descending(a.university_salary, b.university_salary);
+//        });
+//        for(foo in sortData){
+//            for(foobar in data){
+//                if(sortData[foo]["code"] === data[foobar]["code"]){
+//                    console.log("foobar");
+//                    console.log(foobar);
+//                    console.log(foo);
+//                    sortData[foo]["university_salary"] = parseInt(foobar);
+//                }
+//            }
+//        }
+//        for(foo in sortData)
+//        {
+//            sortData[foo] = data[sortData[foo]]
+//        }
 
+        //yAxis
+        console.log(data);
+//        console.log(sortData);
         var yAxis = d3.svg.axis()
                             .scale(yScale2)
                             .tickSize(1)
@@ -206,11 +213,11 @@ window.onload = function(){
                 })
             .on("mouseover", function(){
                 var setNumber = d3.select(this).property("id");
-                var selectClass = $(this).attr("class");
+                var selectClass = d3.select(this).attr("class");
                 d3.selectAll("#" + setNumber).attr({
-                    "opacity": "0.9",
+                    "opacity": 0.9,
                     "stroke": "rgba(0, 0, 0, 0.12)",
-                    "stroke-width": "2",
+                    "stroke-width": 2,
                 });
                 console.log(selectClass);
                 $(".info").empty().text(selectClass);
@@ -218,9 +225,9 @@ window.onload = function(){
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
-                        "opacity": "0.5",
+                        "opacity": 0.5,
                         "stroke": "rgba(0, 0, 0, 0.12)",
-                        "stroke-width": "0",
+                        "stroke-width": 0,
                 });
             })
             .on("click", function(){
@@ -240,6 +247,7 @@ window.onload = function(){
         //legend
         var legendData = [];
         var legendText = [];
+        var legendField= [];
         var foo = 0;
         for(var foobar in data){
             console.log(foobar);
@@ -247,6 +255,7 @@ window.onload = function(){
                 foo = parseInt(data[foobar]["code"] / 100);
                 legendData.push(foo);
                 legendText.push(data[foobar]["subject"].slice(0,-2));
+                legendField.push(data[foobar]["field"]);
             }
         }
         console.log(legendData);
@@ -259,36 +268,41 @@ window.onload = function(){
         legend.append("rect")
                 .attr({
 //                    "x": "width - 5",
-                    "width": "10",
-                    "height": "10",
+                    "width": 10,
+                    "height": 10,
                     "fill": function(d){
                         return color(d);
                     },
                     "id": function(d){
                         return "id" + d;
                     },
-                    "opacity": 0.5
+                    "opacity": 0.5,
+                    "class": function(d, i){
+                        return legendField[i] + "領域 " + legendText[i] + "學門";
+                    },
                 })
             .on("mouseover", function(){
                 var setNumber = d3.select(this).property("id");
-                var setOpa = d3.select(this).attr("opacity");
-                    d3.selectAll("#" + setNumber).attr({
-                        "opacity": "0.9",
-                        "stroke": "rgba(0, 0, 0, 0.12)",
-                        "stroke-width": "2",
-                    });
+                var selectClass = d3.select(this).attr("class");
+                d3.selectAll("#" + setNumber).attr({
+                    "opacity": 0.9,
+                    "stroke": "rgba(0, 0, 0, 0.12)",
+                    "stroke-width": 2,
+                });
+                $(".info").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
                 d3.selectAll("#" + setNumber).attr({
-                        "opacity": "0.5",
-                        "stroke": "rgba(0, 0, 0, 0.12)",
-                        "stroke-width": "0",
+                    "opacity": 0.5,
+                    "stroke": "rgba(0, 0, 0, 0.12)",
+                    "stroke-width": 0,
                 });
             })
             .on("click", function(){
                 var setNumber = d3.select(this).property("id");
-                //page_change(setNumber)
+                console.log(setNumber);
+                pageChange(setNumber);
             })
 //
 //        } else { //deactivate
@@ -325,7 +339,82 @@ window.onload = function(){
                     "font-size": "0.5em",
                 })
                 .text(function(d, i) { return legendText[i]; });
+        //line
+          svg.append("line")
+            .attr({
+              "x1": axisPadding,
+              "y1": yScale2(47300),
+              "x2": width - legendPadding - margin.left - margin.right - padding,
+              "y2": yScale2(47300),
+              "stroke": "#000099",
+              "stroke-width": 2,
+              "stroke-dasharray": 10,
+              "id": "averageLine",
+              "opacity": 0,
+            })
+//            .on("mouseover", function() {
+//                console.log("fuck");
+//                d3.selectAll("#averageText").attr("opacity", 1)
+//            })
+//            .on("mouseout", function() {
+//                d3.selectAll("#averageText").attr("opacity", 0);
+//            })
 
+
+        svg.append("text")//male line text
+            .attr({
+                "x": width/2,
+                "y": yScale2(47300 + 10000),
+                "dy": ".35em",
+//                "fill": "#000029",
+                "id": "averageText",
+                "opacity": 0,
+            })
+            .text("103年平均薪資：47300(NTD)")
+            .style({
+                "fill": "#000099",
+                "text-anchor": "middle",
+                "font-size": 16,
+            })
+        d3.select("#checkAverage")//maleAverage(checkbox) <--> on click function
+            .on("click", function(){
+                if(d3.select("#averageLine").attr("opacity")==0&&
+                   d3.select("#averageText").attr("opacity")==0){
+                    d3.select("#averageLine").attr("opacity", 1);
+                    d3.select("#averageText").attr("opacity", 1);
+                }else{
+                    d3.select("#averageLine").attr("opacity", 0);
+                    d3.select("#averageText").attr("opacity", 0);
+                }
+            })
+//        check if sort?
+        var sorted = false;
+        d3.select("#checkSort")
+            .on("click", function(){
+                if(sorted == false){
+                    console.log("test");
+                    data = data.sort(function(a,b){
+                        return d3.descending(a.university_salary, b.university_salary);
+                    })
+                    bar.transition()
+                        .duration(1000)
+                        .attr({
+                        "cx": function(d, i){
+                            return xScale(i);
+                        }
+                    })
+                    sorted = true;
+                }else{
+                    bar.transition()
+                        .duration(1000)
+                        .attr({
+                            "cx": function(d, i){
+                                return xScale(i);
+                            }
+                        })
+                    sorted = false;
+                }
+            })
     });
 };
 function pageChange(selectNumber) {
@@ -395,9 +484,9 @@ function pageChange(selectNumber) {
     }
         console.log("data/data_" + selectNumber +  ".csv");
         console.log(datasheet);
-        if(datasheet){
-            $("#tip").text("以下的資訊以新台幣(NTD)為單位");
-        }
+//        if(datasheet){
+//            $("#tip").text("以下的資訊以新台幣(NTD)為單位");
+//        }
         //let it do not look so big
         if(datasheet.length === 1 ){
             width = 1000/4;
@@ -409,15 +498,16 @@ function pageChange(selectNumber) {
                 return parseInt(d.university_salary);
             }
         });
+        if(yMax <= 47300){
+            yMax = 47300;
+        }else if(yMin>=47300){
+            yMin = 47300;
+        }
         var xScale = d3.scale.linear()
                         .domain([0, datasheet.length])
-                        .range([padding + axisPadding, width - margin.left - margin.right - padding]);
+                        .range([padding + axisPadding, width - legendPadding - margin.left - margin.right - padding]);
         //to handle the problem that having only one data
-        var yScale = datasheet.length == 1 ?
-                        d3.scale.linear()
-                            .domain([0, yMax])
-                            .range([padding, height - margin.top - margin.bottom - padding]):
-                        d3.scale.linear()
+        var yScale = d3.scale.linear()
                             .domain([yMin, yMax])
                             .range([padding, height - margin.top - margin.bottom - padding]);
         var yScale2 =   d3.scale.linear()
@@ -481,65 +571,73 @@ function pageChange(selectNumber) {
             .attr({
                 "text-anchor": "start",
             });
+        var barWidth = (width - legendPadding - axisPadding - padding * 2) / datasheet.length - barMargin;
     //bar chart
-        var bar = svg.selectAll(".point")
+        var bar = svg.selectAll(".barChart")
                     .data(datasheet)
                     .enter()
-                    .append("circle")
-                    .attr('class', 'point');
+                    .append("rect")
+                    .attr('class', 'barChart');
         var color = d3.scale.category20b();
-            bar.attr({
-                "fill": function(d, i){
-                    if(d.university_salary === 0){
-                        return "#202020";
-                    }
-                    return color(i);
-                },
-                "cx": function(d, i){
-                    return xScale(i);
-                },
-                "cy": height - margin.top - margin.bottom,
-//                    "width": barWidth,
-//                    "height": 0,
-                "r": function(d) {
-                    if(d.university_salary == 0 ){
-                        return 0;
-                    }else{
-                        return Math.sqrt(yScale(d.university_salary));
-                    }
-                },
-                "opacity": 0.5,
-                "id": function(d){
-                    return "id" + d.code;
-                }
+        bar.attr({
+            "fill": function(d, i){
+                return color(i);
+            },
+            "x": function(d, i){
+                return xScale(i);
+            },
+            "y": height - margin.top - margin.bottom,
+            "width": barWidth,
+            "height": 0,
+            "opacity": 0.5,
+            "id": function(d){
+                return "id" + d.code;
+            }
             })
             .on("click", function(){
                 var setNumber = d3.select(this).property("id");
                 var setOpa = d3.select(this).attr("opacity");
-//                     console.log(setNumber);
-//                     console.log(setOpa);
-                if(d3.select(this).attr("opacity") == 0.5){
+                if(d3.select(this).attr("opacity") == 0.5 || d3.select(this).attr("opacity") == 0.2){
+                    bar.attr({
+                            "fill": function(d, i){
+                                if(d.code != setNumber.slice(2)){
+                                    return "#000";
+                                }
+                                return color(i);
+                            },
+                            "opacity": 0.2,
+                            });
                     d3.selectAll("#" + setNumber).attr({
-                        "opacity": "0.9",
-                        "stroke": "rgba(0, 0, 0, 0.12)",
-                        "stroke-width": "2",
+                        "opacity": 0.9,
+                        "stroke": "rgba(0, 0, 0, 0.16)",
+                        "stroke-width": 5,
                     });
                 }else if(d3.select(this).attr("opacity") == 0.9){
                     d3.selectAll("#" + setNumber).attr({
-                        "opacity": "0.5",
-//                            "stroke": "rgba(0, 0, 0, 0.12)",
-                        "stroke-width": "0",
+                        "opacity": 0.5,
+                        "stroke-width": 0,
+                    });
+                    bar.attr({
+                        "fill": function(d, i){
+                            return color(i);
+                        },
+                        "opacity": 0.5,
                     });
                 }
             })
             .transition()
             .duration(1000)
             .attr({
-                "cy": function(d){
-                    if(d.university_salary != 0){
+                "y": function(d){
+                    if(d.university_salary !== 0){
                         return height - margin.top - margin.bottom - yScale(d.university_salary);
                     }
                 },
+                "height": function(d){
+                    if(d.university_salary != 0){
+                        return yScale(d.university_salary);
+                    }
+                }
             });
 
 //        var barTooltip = bar.append("title")
@@ -547,16 +645,15 @@ function pageChange(selectNumber) {
 //                            return d.discipline;
 //                        });
 
-
             //TEXT
 //            console.log(data);
             //x axis
-            var disciplineName = updataDisciplineName(data);
+            var disciplineName = updataDisciplineName(datasheet);
             var xAxisTick = d3.svg.axis()
                         .scale(xScale)
-                        .tickFormat(function(d,i) { return disciplineName[i]; })
+                        .tickFormat(function(d, i) { return disciplineName[i]; })
                         .tickSize(0)
-                        .ticks(data.length)
+                        .ticks(datasheet.length)
                         .orient("bottom");
 
             svg.append("g")
@@ -570,26 +667,73 @@ function pageChange(selectNumber) {
                     "font-size": "14px",
                     "text-anchor": "start",
                     "letter-spacing": "1px",
-//                    "transform": "rotate(20deg)",
                     "color": "#666666"
                 })
                 .attr({
                     "writing-mode": "vertical-lr",
                     "transform": "rotate(30)"
                 });
-    // function updataData(data,indicator){
-    //     var result=[];
-    //     for (var foo in data){
-    //         data[foo]["selected"] = 0;
-    //     }
-    //     for (var foo in data) {
-    //         for(var barr in indicator){
-    //             if(data[foo]["department_number"] === indicator[barr]["Id"]){
-    //                 result.push(data[foo]);
-    //                 data[foo]["selected"] = 1;
-    //             }
-    //         }
-    //     }
+        //line
+            svg.append("line")
+                .attr({
+                  "x1": axisPadding,
+                  "y1": yScale2(47300),
+                  "x2": width - legendPadding - margin.left - margin.right - padding,
+                  "y2": yScale2(47300),
+                  "stroke": "#000099",
+                  "stroke-width": 2,
+                  "stroke-dasharray": 10,
+                  "id": "averageLine",
+                  "opacity": 0,
+                })
+    //            .on("mouseover", function() {
+    //                console.log("fuck");
+    //                d3.selectAll("#averageText").attr("opacity", 1)
+    //            })
+    //            .on("mouseout", function() {
+    //                d3.selectAll("#averageText").attr("opacity", 0);
+    //            })
+
+
+            svg.append("text")//male line text
+                .attr({
+                    "x": width/2,
+                    "y": yScale2(47300 + 1000),
+                    "dy": ".35em",
+    //                "fill": "#000029",
+                    "id": "averageText",
+                    "opacity": 0,
+                })
+                .text("103年平均薪資：47300(NTD)")
+                .style({
+                    "fill": "#000099",
+                    "text-anchor": "middle",
+                    "font-size": 16,
+                })
+            d3.select("#checkAverage")//maleAverage(checkbox) <--> on click function
+                .on("click", function(){
+                    if(d3.select("#averageLine").attr("opacity")==0&&
+                       d3.select("#averageText").attr("opacity")==0){
+                        d3.select("#averageLine").attr("opacity", 1);
+                        d3.select("#averageText").attr("opacity", 1);
+                    }else{
+                        d3.select("#averageLine").attr("opacity", 0);
+                        d3.select("#averageText").attr("opacity", 0);
+                    }
+                })
+//     function updataData(data,indicator){
+//         var result=[];
+//         for (var foo in data){
+//             data[foo]["selected"] = 0;
+//         }
+//         for (var foo in data) {
+//             for(var barr in indicator){
+//                 if(data[foo]["department_number"] === indicator[barr]["Id"]){
+//                     result.push(data[foo]);
+//                     data[foo]["selected"] = 1;
+//                 }
+//             }
+//         }
 
     //     return result;
     // }
