@@ -23,6 +23,12 @@ var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
 var width = 800 + axisPadding + legendPadding;
 var changed = false, setChangeNumber = "id14";
+//I dont kwon why... but it dont work orz
+//d3.selection("#column2")
+//    .attr({
+//        "width": "1000px",
+//        "height": "450px",
+//    });
 //used to filter JSON and choose what to display
 //it will return values whose id is selected key in json
 function filterJSON(json, key, value) {
@@ -48,17 +54,19 @@ window.onload = function(){
         if(this.value === "university"){
             pageInitUniversity();
 //            console.log("???");
-            $(function(){
-//                console.log("?????");
-                window.scrollTo(0,document.body.scrollHeight);
-            })
+//            $(function(){
+////                console.log("?????");
+////                window.scrollTo(0,document.body.scrollHeight);
+//                window.location.hash = "#column3";
+//            })
             pageChangeUniversity(setChangeNumber);
         }else if(this.value === "master"){
             pageInitMaster();
-            $(function(){
-//                console.log("?????");
-                window.scrollTo(0,document.body.scrollHeight);
-            })
+//            $(function(){
+////                console.log("?????");
+////                window.scrollTo(0,document.body.scrollHeight);
+//                window.location.hash = "#column3";
+//            })
             pageChangeMaster(setChangeNumber);
         }
 //        }else if(this.value === "university" && changed === true){
@@ -222,7 +230,8 @@ function pageInitUniversity(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.scrollTo(0,document.body.scrollHeight);
+//                    window.scrollTo(0,document.body.scrollHeight);
+                    window.location.hash = "#column3";
                 })
                 pageChangeUniversity(setChangeNumber);
             })
@@ -293,7 +302,8 @@ function pageInitUniversity(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.scrollTo(0,document.body.scrollHeight);
+//                    window.scrollTo(0,document.body.scrollHeight);
+                    window.location.hash = "#column3";
                 })
                 pageChangeUniversity(setChangeNumber);
 
@@ -316,7 +326,7 @@ function pageInitUniversity(){
               "y1": yScale2(47300),
               "x2": width - legendPadding - margin.left - margin.right - padding,
               "y2": yScale2(47300),
-              "stroke": "#000099",
+              "stroke": "#ee86ba",
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine",
@@ -334,7 +344,7 @@ function pageInitUniversity(){
             })
             .text("103年平均薪資：47300(NTD)")
             .style({
-                "fill": "#000099",
+                "fill": "#ee86ba",
                 "text-anchor": "middle",
                 "font-size": 16,
             })
@@ -598,7 +608,7 @@ function pageChangeUniversity(selectNumber) {
               "y1": yScale2(47300),
               "x2": width - legendPadding - margin.left - margin.right - padding,
               "y2": yScale2(47300),
-              "stroke": "#000099",
+              "stroke": "#ee86ba",
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine2",
@@ -616,14 +626,14 @@ function pageChangeUniversity(selectNumber) {
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 100),
+                "y": yScale2(yMax + 1000),
                 "dy": ".35em",
                 "id": "averageText2",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300(NTD)")
+            .text("103年平均薪資：47300")
             .style({
-                "fill": "#000099",
+                "fill": "#ee86ba",
                 "text-anchor": "middle",
                 "font-size": 16,
             })
@@ -877,7 +887,8 @@ function pageInitMaster(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.scrollTo(0,document.body.scrollHeight);
+//                    window.scrollTo(0,document.body.scrollHeight);
+                    window.location.hash = "#column3";
                 })
                 pageChangeMaster(setChangeNumber);
             })
@@ -948,7 +959,8 @@ function pageInitMaster(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.scrollTo(0,document.body.scrollHeight);
+//                    window.scrollTo(0,document.body.scrollHeight);
+                    window.location.hash = "#column3";
                 })
                 pageChangeMaster(setChangeNumber);
             })
@@ -986,7 +998,7 @@ function pageInitMaster(){
                 "id": "averageText",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300(NTD)")
+            .text("103年平均薪資：47300")
             .style({
                 "fill": "#000099",
                 "text-anchor": "middle",
