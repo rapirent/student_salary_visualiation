@@ -45,25 +45,26 @@ function updataDisciplineName(data){
 window.onload = function(){
     //改用d3來監控radiobox
     d3.selectAll("#radioBox").on("change", function(){
-        if(this.value === "university" && changed === false){
+        if(this.value === "university"){
             pageInitUniversity();
 //            console.log("???");
             pageChangeUniversity(setChangeNumber);
-        }else if(this.value === "master" && changed === false){
+        }else if(this.value === "master"){
             pageInitMaster();
             pageChangeMaster(setChangeNumber);
-        }else if(this.value === "university" && changed === true){
-            pageChangeUniversity(setChangeNumber);
-            $(function(){
-                console.log("?????");
-                window.location.hash = "#column2";
-            });
-        }else if(this.value === "master" && changed === true){
-            pageChangeMaster(setChangeNumber);
-            $(function(){
-                window.location.hash = "#column2";
-            });
         }
+//        }else if(this.value === "university" && changed === true){
+//            pageChangeUniversity(setChangeNumber);
+//            $(function(){
+//                console.log("?????");
+//                window.location.hash = "#column2";
+//            });
+//        }else if(this.value === "master" && changed === true){
+//            pageChangeMaster(setChangeNumber);
+//            $(function(){
+//                window.location.hash = "#column2";
+//            });
+//        }
     });
     pageInitUniversity();
     pageChangeUniversity(setChangeNumber);
