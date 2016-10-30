@@ -302,7 +302,7 @@ function pageInitUniversity(){
                 .attr({
                     "x": "20",
                     "y": "5",
-                    "dy": ".35em",
+                    "dy": ".65em",
                 })
                 .style({
                     "text-anchor": "start",
@@ -956,7 +956,7 @@ function pageInitMaster(){
                 .attr({
                     "x": "20",
                     "y": "5",
-                    "dy": ".35em",
+                    "dy": ".65em",
                 })
                 .style({
                     "text-anchor": "start",
