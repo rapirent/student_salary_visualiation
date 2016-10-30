@@ -337,8 +337,8 @@ function pageInitUniversity(){
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 100),
-                "dy": ".35em",
+                "y": yScale2(yMax),
+                "dy": "-.70em",
                 "id": "averageText",
                 "opacity": 0,
             })
@@ -626,8 +626,8 @@ function pageChangeUniversity(selectNumber) {
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 1000),
-                "dy": ".35em",
+                "y": yScale2(yMax),
+                "dy": "-0.70em",
                 "id": "averageText2",
                 "opacity": 0,
             })
@@ -982,7 +982,7 @@ function pageInitMaster(){
               "y1": yScale2(47300),
               "x2": width - legendPadding - margin.left - margin.right - padding,
               "y2": yScale2(47300),
-              "stroke": "#000099",
+              "stroke": "#ee86ba",
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine",
@@ -993,14 +993,14 @@ function pageInitMaster(){
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 1000),
-                "dy": ".35em",
+                "y": yScale2(yMax),
+                "dy": "-.70em",
                 "id": "averageText",
                 "opacity": 0,
             })
             .text("103年平均薪資：47300")
             .style({
-                "fill": "#000099",
+                "fill": "#ee86ba",
                 "text-anchor": "middle",
                 "font-size": 16,
             })
@@ -1263,7 +1263,7 @@ function pageChangeMaster(selectNumber) {
               "y1": yScale2(47300),
               "x2": width - legendPadding - margin.left - margin.right - padding,
               "y2": yScale2(47300),
-              "stroke": "#000099",
+              "stroke": "#ee86ba",
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine2",
@@ -1281,14 +1281,14 @@ function pageChangeMaster(selectNumber) {
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 1000),
-                "dy": ".35em",
+                "y": yScale2(yMax),
+                "dy": "-.70em",
                 "id": "averageText2",
                 "opacity": 0,
             })
             .text("103年平均薪資：47300(NTD)")
             .style({
-                "fill": "#000099",
+                "fill": "#ee86ba",
                 "text-anchor": "middle",
                 "font-size": 16,
             })
