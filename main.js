@@ -49,9 +49,17 @@ window.onload = function(){
             pageInitUniversity();
 //            console.log("???");
             pageChangeUniversity(setChangeNumber);
+            $(function(){
+//                console.log("?????");
+                window.location.hash = "column";
+            })
         }else if(this.value === "master"){
             pageInitMaster();
             pageChangeMaster(setChangeNumber);
+            $(function(){
+//                console.log("?????");
+                window.location.hash = "column";
+            })
         }
 //        }else if(this.value === "university" && changed === true){
 //            pageChangeUniversity(setChangeNumber);
@@ -103,7 +111,7 @@ function pageInitUniversity(){
 
 //        var barWidth = (width - padding * 2) / data.length - barMargin;
 //        console.log("b");
-        var svg = d3.select(".column").append("initChart").append("svg")
+        var svg = d3.select("#column").append("initChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height)
                                     .on("mousemove", function(){
@@ -206,6 +214,10 @@ function pageInitUniversity(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                $(function(){
+//                console.log("?????");
+                    window.location.hash = "column2";
+                })
                 pageChangeUniversity(setChangeNumber);
             })
             .transition()
@@ -273,6 +285,10 @@ function pageInitUniversity(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                $(function(){
+//                console.log("?????");
+                    window.location.hash = "column2";
+                })
                 pageChangeUniversity(setChangeNumber);
             })
         legend.append("text")
@@ -304,7 +320,7 @@ function pageInitUniversity(){
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 1000),
+                "y": yScale2(yMax + 100),
                 "dy": ".35em",
                 "id": "averageText",
                 "opacity": 0,
@@ -416,7 +432,7 @@ function pageChangeUniversity(selectNumber) {
 //            });
 
 
-        var svg = d3.select(".column2").append("changeChart").append("svg")
+        var svg = d3.select("#column2").append("changeChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height);
         svg.selectAll(".salary")
@@ -593,7 +609,7 @@ function pageChangeUniversity(selectNumber) {
         svg.append("text")
             .attr({
                 "x": width/2,
-                "y": yScale2(yMax + 1000),
+                "y": yScale2(yMax + 100),
                 "dy": ".35em",
                 "id": "averageText2",
                 "opacity": 0,
@@ -753,7 +769,7 @@ function pageInitMaster(){
 
 //        var barWidth = (width - padding * 2) / data.length - barMargin;
 
-        var svg = d3.select(".column").append("initChart").append("svg")
+        var svg = d3.select("#column").append("initChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height);
         //sorted data
@@ -852,6 +868,10 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                $(function(){
+//                console.log("?????");
+                    window.location.hash = "column2";
+                })
                 pageChangeMaster(setChangeNumber);
             })
             .transition()
@@ -919,6 +939,10 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                $(function(){
+//                console.log("?????");
+                    window.location.hash = "column2";
+                })
                 pageChangeMaster(setChangeNumber);
             })
         legend.append("text")
@@ -1060,7 +1084,7 @@ function pageChangeMaster(selectNumber) {
 //            });
 
 
-        var svg = d3.select(".column2").append("changeChart").append("svg")
+        var svg = d3.select("#column2").append("changeChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height);
         svg.selectAll(".salary")
