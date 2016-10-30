@@ -76,6 +76,12 @@ window.onload = function(){
     });
     pageInitUniversity();
     pageChangeUniversity(setChangeNumber);
+    d3.selectAll("#column3")
+        .append("a")
+        .attr({
+            "href": "#title"
+        })
+        .text("▲按我回去")
 };
 function pageInitUniversity(){
     console.log("a");
