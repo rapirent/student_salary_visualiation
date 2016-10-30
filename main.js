@@ -48,18 +48,18 @@ window.onload = function(){
         if(this.value === "university"){
             pageInitUniversity();
 //            console.log("???");
-            pageChangeUniversity(setChangeNumber);
             $(function(){
 //                console.log("?????");
-                window.location.hash = "column";
+                window.scrollTo(0,document.body.scrollHeight);
             })
+            pageChangeUniversity(setChangeNumber);
         }else if(this.value === "master"){
             pageInitMaster();
-            pageChangeMaster(setChangeNumber);
             $(function(){
 //                console.log("?????");
-                window.location.hash = "column";
+                window.scrollTo(0,document.body.scrollHeight);
             })
+            pageChangeMaster(setChangeNumber);
         }
 //        }else if(this.value === "university" && changed === true){
 //            pageChangeUniversity(setChangeNumber);
@@ -222,7 +222,7 @@ function pageInitUniversity(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.location.hash = "column2";
+                    window.scrollTo(0,document.body.scrollHeight);
                 })
                 pageChangeUniversity(setChangeNumber);
             })
@@ -293,9 +293,10 @@ function pageInitUniversity(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.location.hash = "column2";
+                    window.scrollTo(0,document.body.scrollHeight);
                 })
                 pageChangeUniversity(setChangeNumber);
+
             })
         legend.append("text")
                 .attr({
@@ -876,7 +877,7 @@ function pageInitMaster(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.location.hash = "column2";
+                    window.scrollTo(0,document.body.scrollHeight);
                 })
                 pageChangeMaster(setChangeNumber);
             })
@@ -947,7 +948,7 @@ function pageInitMaster(){
                 changed = true;
                 $(function(){
 //                console.log("?????");
-                    window.location.hash = "column2";
+                    window.scrollTo(0,document.body.scrollHeight);
                 })
                 pageChangeMaster(setChangeNumber);
             })
