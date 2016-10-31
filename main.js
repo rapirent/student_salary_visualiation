@@ -172,6 +172,17 @@ function pageInitUniversity(){
             .attr({
                 "text-anchor": "start",
             });
+        svg.append("text")
+            .attr({
+                "class": "yLabel",
+                "text-anchor": "end",
+                "x": axisPadding,
+                "y": height - margin.top - margin.bottom - padding,
+                "dy": ".75em",
+                "opacity": 0.5
+//                "transform": "rotate(-90)"
+            })
+            .text("(NTD)");
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -342,7 +353,7 @@ function pageInitUniversity(){
                 "id": "averageText",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300(NTD)")
+            .text("103年平均月薪資：47300(NTD)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -498,6 +509,17 @@ function pageChangeUniversity(selectNumber) {
             .attr({
                 "text-anchor": "start",
             });
+        svg.append("text")
+            .attr({
+                "class": "yLabel",
+                "text-anchor": "end",
+                "x": axisPadding,
+                "y": height - margin.top - margin.bottom - padding,
+                "dy": ".75em",
+                "opacity": 0.5
+//                "transform": "rotate(-90)"
+            })
+            .text("(NTD)");
         var barWidth = ((width - legendPadding - axisPadding - padding * 2) / datasheet.length) - barMargin;
         if(barWidth >= 300){
             barWidth = 241.66666666666666;
@@ -631,7 +653,7 @@ function pageChangeUniversity(selectNumber) {
                 "id": "averageText2",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300")
+            .text("103年平均月薪資：47300(NTD)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -829,6 +851,17 @@ function pageInitMaster(){
             .attr({
                 "text-anchor": "start",
             });
+        svg.append("text")
+            .attr({
+                "class": "yLabel",
+                "text-anchor": "end",
+                "x": axisPadding,
+                "y": height - margin.top - margin.bottom - padding,
+                "dy": "1em",
+                "opacity": 0.5
+//                "transform": "rotate(-90)"
+            })
+            .text("(NTD)");
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -998,7 +1031,7 @@ function pageInitMaster(){
                 "id": "averageText",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300")
+            .text("103年平均月薪資：47300(NTD)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -1152,6 +1185,17 @@ function pageChangeMaster(selectNumber) {
             .attr({
                 "text-anchor": "start",
             });
+        svg.append("text")
+            .attr({
+                "class": "yLabel",
+                "text-anchor": "end",
+                "x": axisPadding,
+                "y": height - margin.top - margin.bottom - padding,
+                "dy": "1em",
+                "opacity": 0.5
+//                "transform": "rotate(-90)"
+            })
+            .text("(NTD)");
         var barWidth = ((width - legendPadding - axisPadding - padding * 2) / datasheet.length) - barMargin;
 //        console.log(barWidth);
         if(barWidth >= 300){
@@ -1286,7 +1330,7 @@ function pageChangeMaster(selectNumber) {
                 "id": "averageText2",
                 "opacity": 0,
             })
-            .text("103年平均薪資：47300(NTD)")
+            .text("103年平均月薪資：47300(NTD)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
