@@ -23,14 +23,6 @@ var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
 var width = 800 + axisPadding + legendPadding;
 var changed = false, setChangeNumber = "id14";
-//I dont kwon why... but it dont work orz
-//d3.selection("#column2")
-//    .attr({
-//        "width": "1000px",
-//        "height": "450px",
-//    });
-//used to filter JSON and choose what to display
-//it will return values whose id is selected key in json
 function filterJSON(json, key, value) {
     var result = [];
     for (var foo in json) {
@@ -182,7 +174,7 @@ function pageInitUniversity(){
                 "opacity": 0.5
 //                "transform": "rotate(-90)"
             })
-            .text("(NTD)");
+            .text("(新台幣)");
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -225,6 +217,7 @@ function pageInitUniversity(){
                     "opacity": 0.9,
                     "stroke": "rgba(0, 0, 0, 0.12)",
                     "stroke-width": 2,
+					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
             })
@@ -297,6 +290,7 @@ function pageInitUniversity(){
                     "opacity": 0.9,
                     "stroke": "rgba(0, 0, 0, 0.12)",
                     "stroke-width": 2,
+					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
             })
@@ -305,7 +299,6 @@ function pageInitUniversity(){
                 d3.selectAll("#" + setNumber).attr({
                     "opacity": 0.5,
                     "stroke": "rgba(0, 0, 0, 0.12)",
-                    "stroke-width": 0,
                 });
             })
             .on("click", function(){
@@ -353,7 +346,7 @@ function pageInitUniversity(){
                 "id": "averageText",
                 "opacity": 0,
             })
-            .text("103年平均月薪資：47300(NTD)")
+            .text("103年全國平均月薪資：47300(新台幣)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -385,7 +378,7 @@ function pageInitUniversity(){
         var sort = function() {
                         svg.selectAll("circle")
                         .sort(function(a, b){
-                            return d3.descending(a.university_salary, b.university_salary);
+                            return d3.ascending(a.university_salary, b.university_salary);
                         })
                         .transition()
                         .duration(1000)
@@ -439,7 +432,7 @@ function pageChangeUniversity(selectNumber) {
         }
         var xScale = d3.scale.linear()
                         .domain([0, datasheet.length])
-                        .range([padding + axisPadding, width - legendPadding - margin.left - margin.right - padding]);
+                        .range([padding , width - margin.left - margin.right - padding]);
         //to handle the problem that having only one data
         var yScale = datasheet.length == 1 ?
                         d3.scale.linear()
@@ -464,7 +457,9 @@ function pageChangeUniversity(selectNumber) {
                                     .attr("width", width)
                                     .attr("height", height);
         svg.selectAll(".salary")
-            .data(datasheet)
+            .data(datasheet.sort(function(a, b){
+				return d3.ascending(a.university_salary, b.university_salary);
+			 }))
             .enter()
             .append("text")
             .attr("class", "salary")
@@ -495,38 +490,40 @@ function pageChangeUniversity(selectNumber) {
                 }
             });
         //yAxis
-        var yAxis = d3.svg.axis()
-                        .scale(yScale2)
-                        .tickSize(1)
-                        .orient('left');
-        svg.append("g")
-            .attr({
-                "class": "yAxis",
-                "transform": "translate(" + axisPadding +",0)"
-            })
-            .call(yAxis)
-            .append("text")
-            .attr({
-                "text-anchor": "start",
-            });
-        svg.append("text")
-            .attr({
-                "class": "yLabel",
-                "text-anchor": "end",
-                "x": axisPadding,
-                "y": height - margin.top - margin.bottom - padding,
-                "dy": ".75em",
-                "opacity": 0.5
-//                "transform": "rotate(-90)"
-            })
-            .text("(NTD)");
-        var barWidth = ((width - legendPadding - axisPadding - padding * 2) / datasheet.length) - barMargin;
+//        var yAxis = d3.svg.axis()
+//                        .scale(yScale2)
+//                        .tickSize(1)
+//                        .orient('left');
+//        svg.append("g")
+//            .attr({
+//                "class": "yAxis",
+//                "transform": "translate(" + axisPadding +",0)"
+//            })
+//            .call(yAxis)
+//            .append("text")
+//            .attr({
+//                "text-anchor": "start",
+//            });
+//        svg.append("text")
+//            .attr({
+//                "class": "yLabel",
+//                "text-anchor": "end",
+//                "x": axisPadding,
+//                "y": height - margin.top - margin.bottom - padding,
+//                "dy": ".75em",
+//                "opacity": 0.5
+////                "transform": "rotate(-90)"
+//            })
+//            .text("(新台幣)");
+        var barWidth = ((width - padding * 2) / datasheet.length) - barMargin;
         if(barWidth >= 300){
             barWidth = 241.66666666666666;
         }
     //bar chart
         var bar = svg.selectAll(".barChart")
-                    .data(datasheet)
+                    .data(datasheet.sort(function(a, b){
+						return d3.ascending(a.university_salary, b.university_salary);
+                     }))
                     .enter()
                     .append("rect")
                     .attr('class', 'barChart');
@@ -626,9 +623,9 @@ function pageChangeUniversity(selectNumber) {
         //line
         svg.append("line")
             .attr({
-              "x1": axisPadding,
+              "x1": padding,
               "y1": yScale2(47300),
-              "x2": width - legendPadding - margin.left - margin.right - padding,
+              "x2": width - margin.left - margin.right - padding,
               "y2": yScale2(47300),
               "stroke": "#ee86ba",
               "stroke-width": 2,
@@ -653,7 +650,7 @@ function pageChangeUniversity(selectNumber) {
                 "id": "averageText2",
                 "opacity": 0,
             })
-            .text("103年平均月薪資：47300(NTD)")
+            .text("103年全國平均月薪資：47300(新台幣)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -671,7 +668,8 @@ function pageChangeUniversity(selectNumber) {
                 }
             })
         //        check if sort?
-        var sorted = false;
+		var sorted = true;
+		document.getElementById("checkSort2").checked = true;
         d3.select("#checkSort2")
             .on("click", function(){
                 if(sorted == false){
@@ -685,7 +683,7 @@ function pageChangeUniversity(selectNumber) {
         var sort = function() {
                         svg.selectAll("rect")
                             .sort(function(a, b){
-                                return d3.descending(a.university_salary, b.university_salary);
+                                return d3.ascending(a.university_salary, b.university_salary);
                             })
                             .transition()
                             .duration(1000)
@@ -695,7 +693,7 @@ function pageChangeUniversity(selectNumber) {
 
                         svg.selectAll(".salary")
                             .sort(function(a, b){
-                                return d3.descending(a.university_salary, b.university_salary);
+                                return d3.ascending(a.university_salary, b.university_salary);
                             })
                             .transition()
                             .duration(1000)
@@ -703,7 +701,7 @@ function pageChangeUniversity(selectNumber) {
 				   	            return xScale(i);
 				            });
                         disciplineName = updataDisciplineName(datasheet.sort(function(a, b){
-                            return d3.descending(a.university_salary, b.university_salary);
+                            return d3.ascending(a.university_salary, b.university_salary);
                         }))
             //            var disciplineName = updataDisciplineName(datasheet);
                         xAxisTick = d3.svg.axis()
@@ -757,7 +755,6 @@ function pageChangeUniversity(selectNumber) {
                                     .tickSize(0)
                                     .ticks(datasheet.length)
                                     .orient("bottom");
-            //            d3.selectAll(".xAxis").remove();
                         svg.selectAll(".xAxis")
                             .transition()
                             .duration(1000)
@@ -774,6 +771,7 @@ function pageChangeUniversity(selectNumber) {
                                 "transform": "rotate(30)",
                             });
                     };
+		
     });
 };
 function pageInitMaster(){
@@ -861,7 +859,7 @@ function pageInitMaster(){
                 "opacity": 0.5
 //                "transform": "rotate(-90)"
             })
-            .text("(NTD)");
+            .text("(新台幣)");
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -904,6 +902,7 @@ function pageInitMaster(){
                     "opacity": 0.9,
                     "stroke": "rgba(0, 0, 0, 0.12)",
                     "stroke-width": 2,
+					"cursor": "pointer"
                 });
                 $(".info").empty().text(selectClass);
             })
@@ -913,6 +912,7 @@ function pageInitMaster(){
                         "opacity": 0.5,
                         "stroke": "rgba(0, 0, 0, 0.12)",
                         "stroke-width": 0,
+						"cursor": "none"
                 });
             })
             .on("click", function(){
@@ -955,7 +955,6 @@ function pageInitMaster(){
 
         legend.append("rect")
                 .attr({
-//                    "x": "width - 5",
                     "width": 10,
                     "height": 10,
                     "fill": function(d){
@@ -976,6 +975,7 @@ function pageInitMaster(){
                     "opacity": 0.9,
                     "stroke": "rgba(0, 0, 0, 0.12)",
                     "stroke-width": 2,
+					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
             })
@@ -991,8 +991,6 @@ function pageInitMaster(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
                 $(function(){
-//                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
                     window.location.hash = "#column3";
                 })
                 pageChangeMaster(setChangeNumber);
@@ -1031,7 +1029,7 @@ function pageInitMaster(){
                 "id": "averageText",
                 "opacity": 0,
             })
-            .text("103年平均月薪資：47300(NTD)")
+            .text("103年全國平均月薪資：47300(新台幣)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -1063,7 +1061,7 @@ function pageInitMaster(){
         var sort = function() {
                         svg.selectAll("circle")
                         .sort(function(a, b){
-                            return d3.descending(a.master_salary, b.master_salary);
+                            return d3.ascending(a.master_salary, b.master_salary);
                         })
                         .transition()
                         .duration(1000)
@@ -1115,7 +1113,7 @@ function pageChangeMaster(selectNumber) {
         }
         var xScale = d3.scale.linear()
                         .domain([0, datasheet.length])
-                        .range([padding + axisPadding, width - legendPadding - margin.left - margin.right - padding]);
+                        .range([padding, width - margin.left - margin.right - padding]);
         //to handle the problem that having only one data
         var yScale = datasheet.length == 1 ?
                         d3.scale.linear()
@@ -1140,7 +1138,9 @@ function pageChangeMaster(selectNumber) {
                                     .attr("width", width)
                                     .attr("height", height);
         svg.selectAll(".salary")
-            .data(datasheet)
+            .data(datasheet.sort(function(a, b){
+						return d3.ascending(a.master_salary, b.master_salary);
+			 }))
             .enter()
             .append("text")
             .attr("class", "salary")
@@ -1171,39 +1171,16 @@ function pageChangeMaster(selectNumber) {
                 }
             });
         //yAxis
-        var yAxis = d3.svg.axis()
-                        .scale(yScale2)
-                        .tickSize(1)
-                        .orient('left');
-        svg.append("g")
-            .attr({
-                "class": "yAxis",
-                "transform": "translate(" + axisPadding +",0)"
-            })
-            .call(yAxis)
-            .append("text")
-            .attr({
-                "text-anchor": "start",
-            });
-        svg.append("text")
-            .attr({
-                "class": "yLabel",
-                "text-anchor": "end",
-                "x": axisPadding,
-                "y": height - margin.top - margin.bottom - padding,
-                "dy": "1em",
-                "opacity": 0.5
-//                "transform": "rotate(-90)"
-            })
-            .text("(NTD)");
-        var barWidth = ((width - legendPadding - axisPadding - padding * 2) / datasheet.length) - barMargin;
+        var barWidth = ((width - padding * 2) / datasheet.length) - barMargin;
 //        console.log(barWidth);
         if(barWidth >= 300){
             barWidth = 241.66666666666666;
         }
         //bar chart
         var bar = svg.selectAll(".barChart")
-                    .data(datasheet)
+                    .data(datasheet.sort(function(a, b){
+						return d3.ascending(a.master_salary, b.master_salary);
+                     }))
                     .enter()
                     .append("rect")
                     .attr('class', 'barChart');
@@ -1303,9 +1280,9 @@ function pageChangeMaster(selectNumber) {
         //line
         svg.append("line")
             .attr({
-              "x1": axisPadding,
+              "x1": padding,
               "y1": yScale2(47300),
-              "x2": width - legendPadding - margin.left - margin.right - padding,
+              "x2": width - margin.left - margin.right - padding,
               "y2": yScale2(47300),
               "stroke": "#ee86ba",
               "stroke-width": 2,
@@ -1330,7 +1307,7 @@ function pageChangeMaster(selectNumber) {
                 "id": "averageText2",
                 "opacity": 0,
             })
-            .text("103年平均月薪資：47300(NTD)")
+            .text("103年全國平均月薪資：47300(新台幣)")
             .style({
                 "fill": "#ee86ba",
                 "text-anchor": "middle",
@@ -1348,7 +1325,8 @@ function pageChangeMaster(selectNumber) {
                 }
             })
         //        check if sort?
-        var sorted = false;
+        var sorted = true;
+		document.getElementById("checkSort2").checked = true;
         d3.select("#checkSort2")
             .on("click", function(){
                 if(sorted == false){
@@ -1362,7 +1340,7 @@ function pageChangeMaster(selectNumber) {
         var sort = function() {
                         svg.selectAll("rect")
                             .sort(function(a, b){
-                                return d3.descending(a.master_salary, b.master_salary);
+                                return d3.ascending(a.master_salary, b.master_salary);
                             })
                             .transition()
                             .duration(1000)
@@ -1372,7 +1350,7 @@ function pageChangeMaster(selectNumber) {
 
                         svg.selectAll(".salary")
                             .sort(function(a, b){
-                                return d3.descending(a.master_salary, b.master_salary);
+                                return d3.ascending(a.master_salary, b.master_salary);
                             })
                             .transition()
                             .duration(1000)
@@ -1380,7 +1358,7 @@ function pageChangeMaster(selectNumber) {
 				   	            return xScale(i);
 				            });
                         disciplineName = updataDisciplineName(datasheet.sort(function(a, b){
-                            return d3.descending(a.master_salary, b.master_salary);
+                            return d3.ascending(a.master_salary, b.master_salary);
                         }))
             //            var disciplineName = updataDisciplineName(datasheet);
                         xAxisTick = d3.svg.axis()
