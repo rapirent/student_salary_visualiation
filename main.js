@@ -120,10 +120,10 @@ function pageInitUniversity(){
         var svg = d3.select("#column").append("initChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height)
-                                    .on("mousemove", function(){
-                                        //TODO
-                                        console.log(d3.event.clientX - axisPadding - padding);
-                                    });
+//                                    .on("mousemove", function(){
+//                                        //TODO
+//                                        console.log(d3.event.clientX - axisPadding - padding);
+//                                    });
         //sorted data
 //        console.log(data);
 //        var sortData = [];
@@ -465,8 +465,8 @@ function pageChangeUniversity(selectNumber) {
             .attr("class", "salary")
             .text(function(d){
                 if(d.university_salary == 0){
-                    console.log("test")
-                    return "NoData";
+//                    console.log("test")
+                    return "無資料";
                 }
                 return d.university_salary;
             })
@@ -489,32 +489,6 @@ function pageChangeUniversity(selectNumber) {
                     }
                 }
             });
-        //yAxis
-//        var yAxis = d3.svg.axis()
-//                        .scale(yScale2)
-//                        .tickSize(1)
-//                        .orient('left');
-//        svg.append("g")
-//            .attr({
-//                "class": "yAxis",
-//                "transform": "translate(" + axisPadding +",0)"
-//            })
-//            .call(yAxis)
-//            .append("text")
-//            .attr({
-//                "text-anchor": "start",
-//            });
-//        svg.append("text")
-//            .attr({
-//                "class": "yLabel",
-//                "text-anchor": "end",
-//                "x": axisPadding,
-//                "y": height - margin.top - margin.bottom - padding,
-//                "dy": ".75em",
-//                "opacity": 0.5
-////                "transform": "rotate(-90)"
-//            })
-//            .text("(新台幣)");
         var barWidth = ((width - padding * 2) / datasheet.length) - barMargin;
         if(barWidth >= 300){
             barWidth = 241.66666666666666;
@@ -527,10 +501,13 @@ function pageChangeUniversity(selectNumber) {
                     .enter()
                     .append("rect")
                     .attr('class', 'barChart');
-        var color = d3.scale.category20b();
+//        var color = d3.scale.category20b();
         bar.attr({
-            "fill": function(d, i){
-                return color(i);
+            "fill": function(d){
+                return d3.selectAll("#id" + selectNumber).attr("fill");
+//				"id": function(d){
+//                    return "id" + parseInt(d.code / 100);
+//                }
             },
             "x": function(d, i){
                 return xScale(i);
@@ -538,38 +515,48 @@ function pageChangeUniversity(selectNumber) {
             "y": height - margin.top - margin.bottom,
             "width": barWidth,
             "height": 0,
-            "opacity": 0.5,
+            "opacity": function(d, i){
+				return (0.9/datasheet.length)*(i+1);
+			},
             "id": function(d){
-                return "id" + d.code;
+                return "bar_id" + d.code;
             }
             })
             .on("click", function(){
-                var setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id").slice(6);
+				console.log(setNumber);
                 var setOpa = d3.select(this).attr("opacity");
-                if(d3.select(this).attr("opacity") == 0.5 || d3.select(this).attr("opacity") == 0.2){
+				console.log("opacity = " + setOpa);
+                if(d3.select(this).attr("opacity") != 1){
                     bar.attr({
                             "fill": function(d, i){
-                                if(d.code != setNumber.slice(2)){
+                                if(d.code != setNumber){
                                     return "#000";
                                 }
-                                return color(i);
+                                return d3.selectAll("#id" + selectNumber).attr("fill");
                             },
                             "opacity": 0.2,
                             });
-                    d3.selectAll("#" + setNumber).attr({
-                        "opacity": 0.9,
+					console.log("#bar_id" + setNumber);
+                    d3.selectAll("#bar_id" + setNumber).attr({
+                        "opacity": 1,
                         "stroke": "rgba(0, 0, 0, 0.16)",
                         "stroke-width": 5,
                     });
-                }else if(d3.select(this).attr("opacity") == 0.9){
-                    d3.selectAll("#" + setNumber).attr({
+                }else{
+					console.log("#bar_id" + setNumber);
+                    d3.selectAll("#bar_id" + setNumber).attr({
                         "stroke-width": 0,
                     });
                     bar.attr({
-                        "fill": function(d, i){
-                            return color(i);
+                        "fill": function(d){
+							console.log("55678");
+							console.log(d3.selectAll("#id" + selectNumber).attr("fill"));
+                            return d3.selectAll("#id" + selectNumber).attr("fill");
                         },
-                        "opacity": 0.5,
+                        "opacity": function(d,i){
+							return (0.9/datasheet.length)*(i+1);
+						}
                     });
                 }
             })
@@ -1184,10 +1171,12 @@ function pageChangeMaster(selectNumber) {
                     .enter()
                     .append("rect")
                     .attr('class', 'barChart');
-        var color = d3.scale.category20b();
         bar.attr({
-            "fill": function(d, i){
-                return color(i);
+            "fill": function(d){
+                return d3.selectAll("#id" + selectNumber).attr("fill");
+//				"id": function(d){
+//                    return "id" + parseInt(d.code / 100);
+//                }
             },
             "x": function(d, i){
                 return xScale(i);
@@ -1195,38 +1184,48 @@ function pageChangeMaster(selectNumber) {
             "y": height - margin.top - margin.bottom,
             "width": barWidth,
             "height": 0,
-            "opacity": 0.5,
+            "opacity": function(d, i){
+				return (0.9/datasheet.length)*(i+1);
+			},
             "id": function(d){
-                return "id" + d.code;
+                return "bar_id" + d.code;
             }
             })
             .on("click", function(){
-                var setNumber = d3.select(this).property("id");
+                var setNumber = d3.select(this).property("id").slice(6);
+				console.log(setNumber);
                 var setOpa = d3.select(this).attr("opacity");
-                if(d3.select(this).attr("opacity") == 0.5 || d3.select(this).attr("opacity") == 0.2){
+				console.log("opacity = " + setOpa);
+                if(d3.select(this).attr("opacity") != 1){
                     bar.attr({
                             "fill": function(d, i){
-                                if(d.code != setNumber.slice(2)){
+                                if(d.code != setNumber){
                                     return "#000";
                                 }
-                                return color(i);
+                                return d3.selectAll("#id" + selectNumber).attr("fill");
                             },
                             "opacity": 0.2,
                             });
-                    d3.selectAll("#" + setNumber).attr({
-                        "opacity": 0.9,
+					console.log("#bar_id" + setNumber);
+                    d3.selectAll("#bar_id" + setNumber).attr({
+                        "opacity": 1,
                         "stroke": "rgba(0, 0, 0, 0.16)",
                         "stroke-width": 5,
                     });
-                }else if(d3.select(this).attr("opacity") == 0.9){
-                    d3.selectAll("#" + setNumber).attr({
+                }else{
+					console.log("#bar_id" + setNumber);
+                    d3.selectAll("#bar_id" + setNumber).attr({
                         "stroke-width": 0,
                     });
                     bar.attr({
-                        "fill": function(d, i){
-                            return color(i);
+                        "fill": function(d){
+							console.log("55678");
+							console.log(d3.selectAll("#id" + selectNumber).attr("fill"));
+                            return d3.selectAll("#id" + selectNumber).attr("fill");
                         },
-                        "opacity": 0.5,
+                        "opacity": function(d,i){
+							return (0.9/datasheet.length)*(i+1);
+						}
                     });
                 }
             })
@@ -1244,12 +1243,6 @@ function pageChangeMaster(selectNumber) {
                     }
                 }
             });
-
-//        var barTooltip = bar.append("title")
-//                        .text(function(d) {
-//                            return d.discipline;
-//                        });
-
             //TEXT
             //x axis
         var disciplineName = updataDisciplineName(datasheet)
@@ -1290,13 +1283,6 @@ function pageChangeMaster(selectNumber) {
               "id": "averageLine2",
               "opacity": 0,
             })
-    //            .on("mouseover", function() {
-    //                console.log("fuck");
-    //                d3.selectAll("#averageText").attr("opacity", 1)
-    //            })
-    //            .on("mouseout", function() {
-    //                d3.selectAll("#averageText").attr("opacity", 0);
-    //            })
 
 
         svg.append("text")
