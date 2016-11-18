@@ -18,7 +18,7 @@
 */
 
 
-
+var first = false;
 var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
 var width = 800 + axisPadding + legendPadding;
@@ -44,6 +44,7 @@ window.onload = function(){
     //改用d3來監控radiobox
     d3.selectAll("#radioBox").on("change", function(){
         if(this.value === "university"){
+			first = false;
             pageInitUniversity();
 //            console.log("???");
 //            $(function(){
@@ -53,6 +54,7 @@ window.onload = function(){
 //            })
             pageChangeUniversity(setChangeNumber);
         }else if(this.value === "master"){
+			first = false;
             pageInitMaster();
 //            $(function(){
 ////                console.log("?????");
@@ -84,7 +86,6 @@ window.onload = function(){
         .text("▲按我回去")
 };
 function pageInitUniversity(){
-    console.log("a");
     d3.selectAll("initChart").remove();
     //why not d3.selection ...??
     d3.selectAll("#checkAverage").property("checked", false);
@@ -115,39 +116,9 @@ function pageInitUniversity(){
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
 
-//        var barWidth = (width - padding * 2) / data.length - barMargin;
-//        console.log("b");
         var svg = d3.select("#column").append("initChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height)
-//                                    .on("mousemove", function(){
-//                                        //TODO
-//                                        console.log(d3.event.clientX - axisPadding - padding);
-//                                    });
-        //sorted data
-//        console.log(data);
-//        var sortData = [];
-//        for(foo in data){
-//            sortData.push(data[foo]);
-//        }
-//        console.log(sortData);
-//        sortData = sortData.sort(function(a, b) {
-//            return d3.descending(a.university_salary, b.university_salary);
-//        });
-//        for(foo in sortData){
-//            for(foobar in data){
-//                if(sortData[foo]["code"] === data[foobar]["code"]){
-//                    console.log("foobar");
-//                    console.log(foobar);
-//                    console.log(foo);
-//                    sortData[foo]["university_salary"] = parseInt(foobar);
-//                }
-//            }
-//        }
-//        for(foo in sortData)
-//        {
-//            sortData[foo] = data[sortData[foo]]
-//        }
 
         //yAxis
         var yAxis = d3.svg.axis()
@@ -405,9 +376,8 @@ function pageChangeUniversity(selectNumber) {
     d3.selectAll("#selectSubject").remove();
 // d3 to visualize
     d3.selectAll("changeChart").remove();
-    console.log("ccc");
-    d3.selectAll("#checkAverage2").property("checked", false);
-    d3.selectAll("#checkSort2").property("checked", false);
+//    d3.selectAll("#checkAverage2").property("checked", false);
+//    d3.selectAll("#checkSort2").property("checked", false);
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
@@ -504,12 +474,16 @@ function pageChangeUniversity(selectNumber) {
 //        var color = d3.scale.category20b();
         bar.attr({
             "fill": function(d){
+				if(first == false){
+					return "#393b79"
+				}
                 return d3.selectAll("#id" + selectNumber).attr("fill");
 //				"id": function(d){
 //                    return "id" + parseInt(d.code / 100);
 //                }
             },
             "x": function(d, i){
+				first = true;
                 return xScale(i);
             },
             "y": height - margin.top - margin.bottom,
@@ -524,9 +498,7 @@ function pageChangeUniversity(selectNumber) {
             })
             .on("click", function(){
                 var setNumber = d3.select(this).property("id").slice(6);
-				console.log(setNumber);
                 var setOpa = d3.select(this).attr("opacity");
-				console.log("opacity = " + setOpa);
                 if(d3.select(this).attr("opacity") != 1){
                     bar.attr({
                             "fill": function(d, i){
@@ -537,21 +509,17 @@ function pageChangeUniversity(selectNumber) {
                             },
                             "opacity": 0.2,
                             });
-					console.log("#bar_id" + setNumber);
                     d3.selectAll("#bar_id" + setNumber).attr({
                         "opacity": 1,
                         "stroke": "rgba(0, 0, 0, 0.16)",
                         "stroke-width": 5,
                     });
                 }else{
-					console.log("#bar_id" + setNumber);
                     d3.selectAll("#bar_id" + setNumber).attr({
                         "stroke-width": 0,
                     });
                     bar.attr({
                         "fill": function(d){
-							console.log("55678");
-							console.log(d3.selectAll("#id" + selectNumber).attr("fill"));
                             return d3.selectAll("#id" + selectNumber).attr("fill");
                         },
                         "opacity": function(d,i){
@@ -618,7 +586,7 @@ function pageChangeUniversity(selectNumber) {
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine2",
-              "opacity": 0,
+              "opacity": 1,
             })
     //            .on("mouseover", function() {
     //                console.log("fuck");
@@ -635,7 +603,7 @@ function pageChangeUniversity(selectNumber) {
                 "y": yScale2(yMax),
                 "dy": "-0.70em",
                 "id": "averageText2",
-                "opacity": 0,
+                "opacity": 1,
             })
             .text("103年全國平均月薪資：47300(新台幣)")
             .style({
@@ -643,6 +611,7 @@ function pageChangeUniversity(selectNumber) {
                 "text-anchor": "middle",
                 "font-size": 16,
             })
+		document.getElementById("checkAverage2").checked = true;
         d3.select("#checkAverage2")//maleAverage(checkbox) <--> on click function
             .on("click", function(){
                 if(d3.select("#averageLine2").attr("opacity")==0&&
@@ -790,36 +759,11 @@ function pageInitMaster(){
         var yScale2 =   d3.scale.linear()
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
-
-//        var barWidth = (width - padding * 2) / data.length - barMargin;
+;
 
         var svg = d3.select("#column").append("initChart").append("svg")
                                     .attr("width", width)
                                     .attr("height", height);
-        //sorted data
-//        console.log(data);
-//        var sortData = [];
-//        for(foo in data){
-//            sortData.push(data[foo]);
-//        }
-//        console.log(sortData);
-//        sortData = sortData.sort(function(a, b) {
-//            return d3.descending(a.university_salary, b.university_salary);
-//        });
-//        for(foo in sortData){
-//            for(foobar in data){
-//                if(sortData[foo]["code"] === data[foobar]["code"]){
-//                    console.log("foobar");
-//                    console.log(foobar);
-//                    console.log(foo);
-//                    sortData[foo]["university_salary"] = parseInt(foobar);
-//                }
-//            }
-//        }
-//        for(foo in sortData)
-//        {
-//            sortData[foo] = data[sortData[foo]]
-//        }
 
         //yAxis
         var yAxis = d3.svg.axis()
@@ -1073,19 +1017,11 @@ function pageChangeMaster(selectNumber) {
     selectNumber = selectNumber.slice(2);
 //    d3.selectAll("#selectSubject").remove();
     d3.selectAll("changeChart").remove();
-    d3.selectAll("#checkAverage2").property("checked", false);
-    d3.selectAll("#checkSort2").property("checked", false);
 // d3 to visualize
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
     }
-        // console.log("data/data_" + selectNumber +  ".csv");
-        // console.log(datasheet);
-        //let it do not look so big
-        // if(datasheet.length === 1 ){
-        //     width = 1000/4;
-        // }
 
         var yMax = d3.max(datasheet, function(d){return parseInt(d.master_salary);});
         var yMin = d3.min(datasheet, function(d){
@@ -1113,12 +1049,6 @@ function pageChangeMaster(selectNumber) {
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
 
-//        Width = (width - padding * 2) / data.length - barMargin;
-
-
-//            data = data.sort(function(a, b) {
-//                return d3.descending(parseFloat(a.university_salary), parseFloat(b.university_salary));
-//            });
 
 
         var svg = d3.select("#column2").append("changeChart").append("svg")
@@ -1133,8 +1063,7 @@ function pageChangeMaster(selectNumber) {
             .attr("class", "salary")
             .text(function(d){
                 if(d.master_salary == 0){
-                    console.log("test")
-                    return "NoData";
+                    return "無資料";
                 }
                 return d.master_salary;
             })
@@ -1159,7 +1088,6 @@ function pageChangeMaster(selectNumber) {
             });
         //yAxis
         var barWidth = ((width - padding * 2) / datasheet.length) - barMargin;
-//        console.log(barWidth);
         if(barWidth >= 300){
             barWidth = 241.66666666666666;
         }
@@ -1173,12 +1101,16 @@ function pageChangeMaster(selectNumber) {
                     .attr('class', 'barChart');
         bar.attr({
             "fill": function(d){
+				if(first == false){
+					return "#393b79"
+				}
                 return d3.selectAll("#id" + selectNumber).attr("fill");
 //				"id": function(d){
 //                    return "id" + parseInt(d.code / 100);
 //                }
             },
             "x": function(d, i){
+				first = true;
                 return xScale(i);
             },
             "y": height - margin.top - margin.bottom,
@@ -1193,9 +1125,7 @@ function pageChangeMaster(selectNumber) {
             })
             .on("click", function(){
                 var setNumber = d3.select(this).property("id").slice(6);
-				console.log(setNumber);
                 var setOpa = d3.select(this).attr("opacity");
-				console.log("opacity = " + setOpa);
                 if(d3.select(this).attr("opacity") != 1){
                     bar.attr({
                             "fill": function(d, i){
@@ -1206,21 +1136,17 @@ function pageChangeMaster(selectNumber) {
                             },
                             "opacity": 0.2,
                             });
-					console.log("#bar_id" + setNumber);
                     d3.selectAll("#bar_id" + setNumber).attr({
                         "opacity": 1,
                         "stroke": "rgba(0, 0, 0, 0.16)",
                         "stroke-width": 5,
                     });
                 }else{
-					console.log("#bar_id" + setNumber);
                     d3.selectAll("#bar_id" + setNumber).attr({
                         "stroke-width": 0,
                     });
                     bar.attr({
                         "fill": function(d){
-							console.log("55678");
-							console.log(d3.selectAll("#id" + selectNumber).attr("fill"));
                             return d3.selectAll("#id" + selectNumber).attr("fill");
                         },
                         "opacity": function(d,i){
@@ -1281,7 +1207,7 @@ function pageChangeMaster(selectNumber) {
               "stroke-width": 2,
               "stroke-dasharray": 10,
               "id": "averageLine2",
-              "opacity": 0,
+              "opacity": 1,
             })
 
 
@@ -1291,7 +1217,7 @@ function pageChangeMaster(selectNumber) {
                 "y": yScale2(yMax),
                 "dy": "-.70em",
                 "id": "averageText2",
-                "opacity": 0,
+                "opacity": 1,
             })
             .text("103年全國平均月薪資：47300(新台幣)")
             .style({
@@ -1299,6 +1225,7 @@ function pageChangeMaster(selectNumber) {
                 "text-anchor": "middle",
                 "font-size": 16,
             })
+		document.getElementById("checkAverage2").checked = true;
         d3.select("#checkAverage2")//maleAverage(checkbox) <--> on click function
             .on("click", function(){
                 if(d3.select("#averageLine2").attr("opacity")==0&&

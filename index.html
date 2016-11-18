@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>graduate_salary</title>
+    <title>你想知道你的學長姐們的表現嗎？</title>
     <!-- <script type="text/javascript" src="scripts/jquery-1.7.2.min.js"></script> -->
     <script src="https://d3js.org/d3.v3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
@@ -11,50 +11,25 @@
 </head>
 <body>
     <div id="title" sytle="margin: 0px auto">
-        <h1 align="center">你想知道你的學長姐們的表現嗎？</h1>
+        <h1 align="center">大專院校100年畢業生103年職場薪資圖</h1>
         <h2 align="center">用圖表呈現100年畢業的前輩們在103年職場上的表現！</h2>
         <div class="info" align="center" style="font-size:2em">教育領域 教育學門</div>
     </div>
-    <span id="tip">以下的資訊以新台幣為單位<br></span>
+    <span id="tip">領域、學門、學類之原始順序依照教育部原始資料編號編排，無任何相關意義<br></span>
     <label><input id="radioBox" type="radio" name="mode" value="university" checked="checked">日間學士</label>
     <label><input id="radioBox" type="radio" name="mode" value="master">日間碩士（不含在職專班）</label>
-<!--
-    <a><input id="checkAverage" type="checkbox">顯示103年平均薪資</a>
-    <a><input id="checkSort" type="checkbox">選擇是否排序</a>
-    <label><input id="radioBox" type="radio" name="mode" value="university" checked="checked">日間學士</label>
-    <label><input id="radioBox" type="radio" name="mode" value="master">日間碩士（不含在職專班）</label>
--->
-<!--
-    <div class="option">
-        <span style="font-size:16px">選擇領域：</span>
-        <select id="field" ></select>
-
-        <span style="font-size:16px">選擇學門：</span>
-    <select id="discipline">
-         <option value="0" disabled=disabled selected=selected>請先選取領域</option>
-    </select>
-     <span style="font-size:16px">選擇學類：</span>
-    <select id="subject"></select> 
-        <button id="search" type="button">search</button>
-        <br>
-        <span id="tip"></span>
-    </div>
--->
     <div class="row">
         <input id="checkAverage" type="checkbox">顯示103年全國平均薪資
         <input id="checkSort" type="checkbox">是否排序下表
         <div id="column" style="width:1000px;height:450px;">
-<!--            <div class="initChart"></div>-->
         </div>
         <input id="checkAverage2" type="checkbox">顯示103年全國平均薪資
         <input id="checkSort2" type="checkbox">是否排序下表
         <div id="column2" style="width:1000px;height:450px;">
-<!--            <div class="changeChart"></div>-->
         </div>
         <div id="column3">
         </div>
     </div>
-    <!-- <div id="tip" style="font-size:12px">TIP:可以點選單一長條以使特定校系高亮化</div> -->
-    <!-- <div id="tooltip" class="hidden"></div> -->
-    <!-- <div id = "legendContainer" class="legendContainer"></div> -->
+	<span id="tip2">資料來源：</span>
+	<a id="link" href="https://udb.moe.edu.tw/Form/FormIndex">教育部 大專院校校務資訊公開平台<br></a>
 </html>
