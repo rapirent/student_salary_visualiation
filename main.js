@@ -16,8 +16,9 @@
 #509b4e
 #b351ab
 */
-
-
+var field_list = ["教育領域","人文及藝術領域","社會科學、商業及法律領域",
+					"科學領域","工程、製造及營造領域","農學領域",
+					"醫藥衛生及社福領域","服務領域", "其他領域"];
 var first = false;
 var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
@@ -146,6 +147,9 @@ function pageInitUniversity(){
 //                "transform": "rotate(-90)"
             })
             .text("(新台幣)");
+        var last_field_name;
+        var new_xScale = [];
+        var new_yScale = [];
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -161,6 +165,16 @@ function pageInitUniversity(){
                     return color(parseInt(d.code / 100));
                 },
                 "cx": function(d, i){
+                	if(d.field != last_field_name){
+             			new_xScale.push(xScale(i));
+             			// if(d.university_salary == 0){
+             			// 	new_yScale.push(height - margin.top - margin.bottom);
+             			// }
+             			// else{
+         				new_yScale.push(height - margin.top - margin.bottom - yScale(d.university_salary));
+             			// }
+             			last_field_name = d.field;
+                	}
                     return xScale(i);
                 },
                 "cy": height - margin.top - margin.bottom,
@@ -191,7 +205,7 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
-                $("#info_text").empty().text(selectClass);
+                // $("#info_text").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -204,12 +218,12 @@ function pageInitUniversity(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                pageChangeUniversity(setChangeNumber);
                 $(function(){
 //                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
+                   	// window.scrollTo(0,document.body.scrollHeight);
                     window.location.hash = "#column3";
                 })
-                pageChangeUniversity(setChangeNumber);
             })
             .transition()
             .duration(1000)
@@ -220,6 +234,35 @@ function pageInitUniversity(){
                     }
                 },
             });
+        //subject_name
+        svg.selectAll(".field_text")
+        	.data(field_list)
+        	.enter()
+        	.append("text")
+        	.attr({
+        		"class": "field_text",
+        		"x": function(d,i){
+        			return new_xScale[i];
+        		},
+        		"y": function(d,i){
+        			return new_yScale[i];
+        		},
+        	})
+        	.text(function(d,i){
+        		// console.log(new_yScale[i]);
+        		// console.log(height- margin.top - margin.bottom);
+        		if(new_yScale[i] > (height - margin.top - margin.bottom)){
+        			return;
+        		}
+        		return d.slice(0,2);
+        	})
+        	.style({
+        		"text-anchor": "start",
+        		// "font-size": "2em",
+        		"color": "#666666",
+        		"letter-spacing": "1px",
+        		"cursor": "none",
+        	});
         //legend
         var legendData = [];
         var legendText = [];
@@ -265,8 +308,8 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
-                $("#info_text").empty().text(selectClass);
-                d3.select("#info_text").attr("color","#666666");
+                // $("#info_text").empty().text(selectClass);
+                // d3.select("#info_text").attr("color","#666666");
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -278,28 +321,33 @@ function pageInitUniversity(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+//                 $(function(){
+// //                console.log("?????");
+//                    window.scrollTo(0,document.body.scrollHeight);
+//                     // window.location.hash = "#column3";
+//                 })
+                pageChangeUniversity(setChangeNumber);
                 $(function(){
 //                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
+                   // window.scrollTo(0,document.body.scrollHeight);
                     window.location.hash = "#column3";
                 })
-                pageChangeUniversity(setChangeNumber);
+            });
 
-            })
-        svg.append("text")
-        	.attr({
-        		"x": width/2,
-        		"y": height - margin.bottom,
-        		"dy": "2em",
-        		"id": "info_text",
-        		"color": "#666666",
-        	})
-        	.text("教育領域 教育學門")
-        	.style({
-        		"text-anchor": "middle",
-        		"font-size": "2em",
-        		"color": "#666666",
-        	})
+        // svg.append("text")
+        // 	.attr({
+        // 		"x": width/2,
+        // 		"y": height - margin.bottom,
+        // 		"dy": "2em",
+        // 		"id": "info_text",
+        // 		"color": "#666666",
+        // 	})
+        // 	.text("教育領域 教育學門")
+        // 	.style({
+        // 		"text-anchor": "middle",
+        // 		"font-size": "2em",
+        // 		"color": "#666666",
+        // 	})
         //
         legend.append("text")
                 .attr({
@@ -809,6 +857,9 @@ function pageInitMaster(){
 //                "transform": "rotate(-90)"
             })
             .text("(新台幣)");
+        var last_field_name;
+        var new_xScale = [];
+        var new_yScale = [];
         //bar chart
         var bar = svg.selectAll(".point")
                     .data(data)
@@ -824,6 +875,11 @@ function pageInitMaster(){
                     return color(parseInt(d.code / 100));
                 },
                 "cx": function(d, i){
+                	if(d.field != last_field_name){
+             			new_xScale.push(xScale(i));
+         				new_yScale.push(height - margin.top - margin.bottom - yScale(d.master_salary));
+             			last_field_name = d.field;
+                	}
                     return xScale(i);
                 },
                 "cy": height - margin.top - margin.bottom,
@@ -868,12 +924,17 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+//                 $(function(){
+// //                console.log("?????");
+//                    window.scrollTo(0,document.body.scrollHeight);
+//                     // window.location.hash = "#column3";
+//                 })
+                pageChangeMaster(setChangeNumber);
                 $(function(){
 //                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
+                   // window.scrollTo(0,document.body.scrollHeight);
                     window.location.hash = "#column3";
                 })
-                pageChangeMaster(setChangeNumber);
             })
             .transition()
             .duration(1000)
@@ -884,6 +945,36 @@ function pageInitMaster(){
                     }
                 },
             });
+        //subject_name
+        svg.selectAll(".field_text")
+        	.data(field_list)
+        	.enter()
+        	.append("text")
+        	.attr({
+        		"class": "field_text",
+        		"x": function(d,i){
+        			return new_xScale[i];
+        		},
+        		"y": function(d,i){
+        			// console.log(new_yScale[i]);
+        			return new_yScale[i];
+        		},
+        	})
+        	.text(function(d,i){
+        		// console.log(new_yScale[i]);
+        		// console.log(height- margin.top - margin.bottom);
+        		if(new_yScale[i] > (height - margin.top - margin.bottom)){
+        			return;
+        		}
+        		return d.slice(0,2);
+        	})
+        	.style({
+        		"text-anchor": "start",
+        		// "font-size": "2em",
+        		"color": "#666666",
+        		"letter-spacing": "1px",
+        		"cursor": "none",
+        	});
         //legend
         var legendData = [];
         var legendText = [];
@@ -940,10 +1031,16 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
+                // $(function(){
+                //    	window.scrollTo(0,document.body.scrollHeight);
+                //     // window.location.hash = "#column3";
+                // })
+                pageChangeMaster(setChangeNumber);
                 $(function(){
+//                console.log("?????");
+                   // window.scrollTo(0,document.body.scrollHeight);
                     window.location.hash = "#column3";
                 })
-                pageChangeMaster(setChangeNumber);
             })
         legend.append("text")
                 .attr({
