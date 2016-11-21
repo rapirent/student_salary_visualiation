@@ -191,6 +191,7 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
+                $("#info_text").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -264,6 +265,8 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
+                $("#info_text").empty().text(selectClass);
+                d3.select("#info_text").attr("color","#666666");
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -283,6 +286,21 @@ function pageInitUniversity(){
                 pageChangeUniversity(setChangeNumber);
 
             })
+        svg.append("text")
+        	.attr({
+        		"x": width/2,
+        		"y": height - margin.bottom,
+        		"dy": "2em",
+        		"id": "info_text",
+        		"color": "#666666",
+        	})
+        	.text("教育領域 教育學門")
+        	.style({
+        		"text-anchor": "middle",
+        		"font-size": "2em",
+        		"color": "#666666",
+        	})
+        //
         legend.append("text")
                 .attr({
                     "x": "20",
@@ -727,7 +745,7 @@ function pageChangeUniversity(selectNumber) {
                                 "transform": "rotate(30)",
                             });
                     };
-		
+
     });
 };
 function pageInitMaster(){
@@ -836,6 +854,7 @@ function pageInitMaster(){
 					"cursor": "pointer"
                 });
                 $(".info").empty().text(selectClass);
+                // $("#info_text").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
