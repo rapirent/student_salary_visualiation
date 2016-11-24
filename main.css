@@ -5,22 +5,19 @@ html {
     color: #666666;
 }
 #title, h1, h2, .info{
-    margin:0 3em .1em 3em;
+    margin:1em 3em 1em 3em;
     text-align:center;
-/*    margin: 0em auto;*/
     font-weight: normal;
-/*    font-size: 3em;*/
-/*    text-align: left;*/
-}
-.info{
-    font-size: 2em;
 }
 .column{
   display: inline-block;
   vertical-align: top;
 }
+#masterOrUniversity {
+	border-right:0.05em solid #666666;
+	display: inline-block;
+}
 body{
-/*    height: 100%;*/
     width: 100%;
     margin: 0em auto;
     text-align:center;
@@ -30,7 +27,7 @@ body{
     font-weight: normal;
     color: #666666;
     max-width: 1000px;
-    padding: 2em 2em 4em;
+    padding: 2em 2em 2em;
     font-size:1em;
     background: #fff;
     color: #545454;

@@ -42,49 +42,24 @@ function updataDisciplineName(data){
     return temp;
 }
 window.onload = function(){
-    //改用d3來監控radiobox
     d3.selectAll("#radioBox").on("change", function(){
         if(this.value === "university"){
 			first = false;
             pageInitUniversity();
-//            console.log("???");
-//            $(function(){
-////                console.log("?????");
-////                window.scrollTo(0,document.body.scrollHeight);
-//                window.location.hash = "#column3";
-//            })
             pageChangeUniversity(setChangeNumber);
         }else if(this.value === "master"){
 			first = false;
             pageInitMaster();
-//            $(function(){
-////                console.log("?????");
-////                window.scrollTo(0,document.body.scrollHeight);
-//                window.location.hash = "#column3";
-//            })
             pageChangeMaster(setChangeNumber);
         }
-//        }else if(this.value === "university" && changed === true){
-//            pageChangeUniversity(setChangeNumber);
-//            $(function(){
-//                console.log("?????");
-//                window.location.hash = "#column2";
-//            });
-//        }else if(this.value === "master" && changed === true){
-//            pageChangeMaster(setChangeNumber);
-//            $(function(){
-//                window.location.hash = "#column2";
-//            });
-//        }
     });
     pageInitUniversity();
     pageChangeUniversity(setChangeNumber);
-    d3.selectAll("#column3")
-        .append("a")
-        .attr({
-            "href": "#title"
+    d3.select("#backButton").on("click", function(){
+    	$(function(){
+			$("html, body").stop().animate({scrollTop:0}, 700, 'linear');
         })
-        .text("▲按我回去")
+    })
 };
 function pageInitUniversity(){
     d3.selectAll("initChart").remove();
@@ -167,19 +142,12 @@ function pageInitUniversity(){
                 "cx": function(d, i){
                 	if(d.field != last_field_name){
              			new_xScale.push(xScale(i));
-             			// if(d.university_salary == 0){
-             			// 	new_yScale.push(height - margin.top - margin.bottom);
-             			// }
-             			// else{
          				new_yScale.push(height - margin.top - margin.bottom - yScale(d.university_salary));
-             			// }
              			last_field_name = d.field;
                 	}
                     return xScale(i);
                 },
                 "cy": height - margin.top - margin.bottom,
-//                    "width": barWidth,
-//                    "height": 0,
                 "r": function(d) {
                     if(d.university_salary == 0 ){
                         return 0;
@@ -205,7 +173,6 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
-                // $("#info_text").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -220,9 +187,7 @@ function pageInitUniversity(){
                 changed = true;
                 pageChangeUniversity(setChangeNumber);
                 $(function(){
-//                console.log("?????");
-                   	// window.scrollTo(0,document.body.scrollHeight);
-                    window.location.hash = "#column3";
+					$("html, body").stop().animate({scrollTop:document.body.scrollHeight}, 700, 'linear');
                 })
             })
             .transition()
@@ -234,7 +199,7 @@ function pageInitUniversity(){
                     }
                 },
             });
-        //subject_name
+        //field_text
         svg.selectAll(".field_text")
         	.data(field_list)
         	.enter()
@@ -247,10 +212,13 @@ function pageInitUniversity(){
         		"y": function(d,i){
         			return new_yScale[i];
         		},
+        		"dy": function(d,i){
+        			if(new_yScale[i] - 2*16 >0)
+        				return "-2em";
+        		},
+        		"fill": "#666666",
         	})
         	.text(function(d,i){
-        		// console.log(new_yScale[i]);
-        		// console.log(height- margin.top - margin.bottom);
         		if(new_yScale[i] > (height - margin.top - margin.bottom)){
         			return;
         		}
@@ -258,8 +226,6 @@ function pageInitUniversity(){
         	})
         	.style({
         		"text-anchor": "start",
-        		// "font-size": "2em",
-        		"color": "#666666",
         		"letter-spacing": "1px",
         		"cursor": "none",
         	});
@@ -284,7 +250,6 @@ function pageInitUniversity(){
 
         legend.append("rect")
                 .attr({
-//                    "x": "width - 5",
                     "width": 10,
                     "height": 10,
                     "fill": function(d){
@@ -308,8 +273,6 @@ function pageInitUniversity(){
 					"cursor": "pointer",
                 });
                 $(".info").empty().text(selectClass);
-                // $("#info_text").empty().text(selectClass);
-                // d3.select("#info_text").attr("color","#666666");
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -321,34 +284,13 @@ function pageInitUniversity(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
-//                 $(function(){
-// //                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
-//                     // window.location.hash = "#column3";
-//                 })
                 pageChangeUniversity(setChangeNumber);
                 $(function(){
-//                console.log("?????");
-                   // window.scrollTo(0,document.body.scrollHeight);
-                    window.location.hash = "#column3";
+					$("html, body").stop().animate({scrollTop:document.body.scrollHeight}, 700, 'linear');
                 })
             });
 
-        // svg.append("text")
-        // 	.attr({
-        // 		"x": width/2,
-        // 		"y": height - margin.bottom,
-        // 		"dy": "2em",
-        // 		"id": "info_text",
-        // 		"color": "#666666",
-        // 	})
-        // 	.text("教育領域 教育學門")
-        // 	.style({
-        // 		"text-anchor": "middle",
-        // 		"font-size": "2em",
-        // 		"color": "#666666",
-        // 	})
-        //
+
         legend.append("text")
                 .attr({
                     "x": "20",
@@ -407,9 +349,11 @@ function pageInitUniversity(){
                 if(sorted == false){
                     sort();
                     sorted = true;
+                    svg.selectAll(".field_text").style("opacity",0);
                 }else{
                     sort2();
                     sorted = false;
+                    svg.selectAll(".field_text").style("opacity",1);
                 }
             });
         var sort = function() {
@@ -437,23 +381,14 @@ function pageInitUniversity(){
     });
 }
 function pageChangeUniversity(selectNumber) {
-//        console.log(selectNumber);
     selectNumber = selectNumber.slice(2);
     d3.selectAll("#selectSubject").remove();
 // d3 to visualize
     d3.selectAll("changeChart").remove();
-//    d3.selectAll("#checkAverage2").property("checked", false);
-//    d3.selectAll("#checkSort2").property("checked", false);
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
     }
-        // console.log("data/data_" + selectNumber +  ".csv");
-        // console.log(datasheet);
-        //let it do not look so big
-        // if(datasheet.length === 1 ){
-        //     width = 1000/4;
-        // }
 
         var yMax = d3.max(datasheet, function(d){return parseInt(d.university_salary);});
         var yMin = d3.min(datasheet, function(d){
@@ -481,13 +416,6 @@ function pageChangeUniversity(selectNumber) {
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
 
-//        Width = (width - padding * 2) / data.length - barMargin;
-
-
-//            data = data.sort(function(a, b) {
-//                return d3.descending(parseFloat(a.university_salary), parseFloat(b.university_salary));
-//            });
-
 
         var svg = d3.select("#column2").append("changeChart").append("svg")
                                     .attr("width", width)
@@ -501,7 +429,6 @@ function pageChangeUniversity(selectNumber) {
             .attr("class", "salary")
             .text(function(d){
                 if(d.university_salary == 0){
-//                    console.log("test")
                     return "無資料";
                 }
                 return d.university_salary;
@@ -537,16 +464,12 @@ function pageChangeUniversity(selectNumber) {
                     .enter()
                     .append("rect")
                     .attr('class', 'barChart');
-//        var color = d3.scale.category20b();
         bar.attr({
             "fill": function(d){
 				if(first == false){
 					return "#393b79"
 				}
                 return d3.selectAll("#id" + selectNumber).attr("fill");
-//				"id": function(d){
-//                    return "id" + parseInt(d.code / 100);
-//                }
             },
             "x": function(d, i){
 				first = true;
@@ -562,6 +485,12 @@ function pageChangeUniversity(selectNumber) {
                 return "bar_id" + d.code;
             }
             })
+        	.on("mouseover", function(){
+        		d3.select(this).style("cursor","pointer");
+        	})
+        	.on("mouseout", function(){
+        		d3.select(this).style("cursor", "none");
+        	})
             .on("click", function(){
                 var setNumber = d3.select(this).property("id").slice(6);
                 var setOpa = d3.select(this).attr("opacity");
@@ -609,11 +538,6 @@ function pageChangeUniversity(selectNumber) {
                 }
             });
 
-//        var barTooltip = bar.append("title")
-//                        .text(function(d) {
-//                            return d.discipline;
-//                        });
-
             //TEXT
             //x axis
         var disciplineName = updataDisciplineName(datasheet)
@@ -654,13 +578,6 @@ function pageChangeUniversity(selectNumber) {
               "id": "averageLine2",
               "opacity": 1,
             })
-    //            .on("mouseover", function() {
-    //                console.log("fuck");
-    //                d3.selectAll("#averageText").attr("opacity", 1)
-    //            })
-    //            .on("mouseout", function() {
-    //                d3.selectAll("#averageText").attr("opacity", 0);
-    //            })
 
 
         svg.append("text")
@@ -910,7 +827,7 @@ function pageInitMaster(){
 					"cursor": "pointer"
                 });
                 $(".info").empty().text(selectClass);
-                // $("#info_text").empty().text(selectClass);
+                $("#info_text").empty().text(selectClass);
             })
             .on("mouseout", function(){
                 var setNumber = d3.select(this).property("id");
@@ -924,16 +841,9 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
-//                 $(function(){
-// //                console.log("?????");
-//                    window.scrollTo(0,document.body.scrollHeight);
-//                     // window.location.hash = "#column3";
-//                 })
                 pageChangeMaster(setChangeNumber);
                 $(function(){
-//                console.log("?????");
-                   // window.scrollTo(0,document.body.scrollHeight);
-                    window.location.hash = "#column3";
+					$("html, body").stop().animate({scrollTop:document.body.scrollHeight}, 700, 'linear');
                 })
             })
             .transition()
@@ -945,7 +855,7 @@ function pageInitMaster(){
                     }
                 },
             });
-        //subject_name
+        //field_name
         svg.selectAll(".field_text")
         	.data(field_list)
         	.enter()
@@ -956,13 +866,15 @@ function pageInitMaster(){
         			return new_xScale[i];
         		},
         		"y": function(d,i){
-        			// console.log(new_yScale[i]);
         			return new_yScale[i];
         		},
+        		"dy": function(d,i){
+        			if(new_yScale[i] - 2*16 >0)
+        				return "-2em";
+        		},
+        		"fill": "#666666"
         	})
         	.text(function(d,i){
-        		// console.log(new_yScale[i]);
-        		// console.log(height- margin.top - margin.bottom);
         		if(new_yScale[i] > (height - margin.top - margin.bottom)){
         			return;
         		}
@@ -970,8 +882,6 @@ function pageInitMaster(){
         	})
         	.style({
         		"text-anchor": "start",
-        		// "font-size": "2em",
-        		"color": "#666666",
         		"letter-spacing": "1px",
         		"cursor": "none",
         	});
@@ -1031,15 +941,9 @@ function pageInitMaster(){
             .on("click", function(){
                 setChangeNumber = d3.select(this).property("id");
                 changed = true;
-                // $(function(){
-                //    	window.scrollTo(0,document.body.scrollHeight);
-                //     // window.location.hash = "#column3";
-                // })
                 pageChangeMaster(setChangeNumber);
                 $(function(){
-//                console.log("?????");
-                   // window.scrollTo(0,document.body.scrollHeight);
-                    window.location.hash = "#column3";
+					$("html, body").stop().animate({scrollTop:document.body.scrollHeight}, 700, 'linear');
                 })
             })
         legend.append("text")
@@ -1100,9 +1004,11 @@ function pageInitMaster(){
                 if(sorted == false){
                     sort();
                     sorted = true;
+                    svg.selectAll(".field_text").style("opacity",0);
                 }else{
                     sort2();
                     sorted = false;
+                    svg.selectAll(".field_text").style("opacity",1);
                 }
             });
         var sort = function() {
@@ -1131,7 +1037,6 @@ function pageInitMaster(){
 }
 function pageChangeMaster(selectNumber) {
     selectNumber = selectNumber.slice(2);
-//    d3.selectAll("#selectSubject").remove();
     d3.selectAll("changeChart").remove();
 // d3 to visualize
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
@@ -1221,9 +1126,6 @@ function pageChangeMaster(selectNumber) {
 					return "#393b79"
 				}
                 return d3.selectAll("#id" + selectNumber).attr("fill");
-//				"id": function(d){
-//                    return "id" + parseInt(d.code / 100);
-//                }
             },
             "x": function(d, i){
 				first = true;
@@ -1239,6 +1141,12 @@ function pageChangeMaster(selectNumber) {
                 return "bar_id" + d.code;
             }
             })
+        	.on("mouseover", function(){
+        		d3.select(this).style("cursor","pointer");
+        	})
+        	.on("mouseout", function(){
+        		d3.select(this).style("cursor", "none");
+        	})
             .on("click", function(){
                 var setNumber = d3.select(this).property("id").slice(6);
                 var setOpa = d3.select(this).attr("opacity");
