@@ -18,7 +18,7 @@
 */
 var field_list = ["教育領域","人文及藝術領域","社會科學、商業及法律領域",
 					"科學領域","工程、製造及營造領域","農學領域",
-					"醫藥衛生及社福領域","服務領域", "其他領域"];
+					"衛福","服務領域", "其他領域"];
 var first = false;
 var margin = {top: 10, right: 0, bottom: 140, left: 0};
 var height = 450, padding = 30, barMargin = 5, axisPadding = 80 , legendPadding = 120;
@@ -42,6 +42,16 @@ function updataDisciplineName(data){
     return temp;
 }
 window.onload = function(){
+	d3.select("#column").append("initChart")
+						.append("svg")
+                        .attr("width", width)
+	                    .attr("height", height)
+	                    .attr("class", "initChart")
+    d3.select("#column2").append("changeChart")
+    					.append("svg")
+                        .attr("width", width)
+                        .attr("height", height)
+                        .attr("class", "changeChart");
     d3.selectAll("#radioBox").on("change", function(){
         if(this.value === "university"){
 			first = false;
@@ -62,7 +72,7 @@ window.onload = function(){
     })
 };
 function pageInitUniversity(){
-    d3.selectAll("initChart").remove();
+    d3.selectAll(".initChart *").remove();
     //why not d3.selection ...??
     d3.selectAll("#checkAverage").property("checked", false);
     d3.selectAll("#checkSort").property("checked", false);
@@ -92,9 +102,7 @@ function pageInitUniversity(){
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
 
-        var svg = d3.select("#column").append("initChart").append("svg")
-                                    .attr("width", width)
-                                    .attr("height", height)
+        var svg = d3.select(".initChart");
 
         //yAxis
         var yAxis = d3.svg.axis()
@@ -207,6 +215,8 @@ function pageInitUniversity(){
         	.attr({
         		"class": "field_text",
         		"x": function(d,i){
+        			if(i!=new_xScale.length-1)
+        				return (new_xScale[i]+new_xScale[i+1])/2;
         			return new_xScale[i];
         		},
         		"y": function(d,i){
@@ -214,7 +224,7 @@ function pageInitUniversity(){
         		},
         		"dy": function(d,i){
         			if(new_yScale[i] - 2*16 >0)
-        				return "-2em";
+        				return "-3.5em";
         		},
         		"fill": "#666666",
         	})
@@ -225,7 +235,7 @@ function pageInitUniversity(){
         		return d.slice(0,2);
         	})
         	.style({
-        		"text-anchor": "start",
+        		"text-anchor": "middle",
         		"letter-spacing": "1px",
         		"cursor": "none",
         	});
@@ -382,9 +392,8 @@ function pageInitUniversity(){
 }
 function pageChangeUniversity(selectNumber) {
     selectNumber = selectNumber.slice(2);
-    d3.selectAll("#selectSubject").remove();
 // d3 to visualize
-    d3.selectAll("changeChart").remove();
+    d3.selectAll(".changeChart *").remove();
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
         console.log(error);
@@ -416,10 +425,10 @@ function pageChangeUniversity(selectNumber) {
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
 
-
-        var svg = d3.select("#column2").append("changeChart").append("svg")
-                                    .attr("width", width)
-                                    .attr("height", height);
+        var svg = d3.select(".changeChart");
+        // var svg = d3.select("#column2").append("changeChart").append("svg")
+        //                             .attr("width", width)
+        //                             .attr("height", height);
         svg.selectAll(".salary")
             .data(datasheet.sort(function(a, b){
 				return d3.ascending(a.university_salary, b.university_salary);
@@ -714,7 +723,7 @@ function pageChangeUniversity(selectNumber) {
     });
 };
 function pageInitMaster(){
-    d3.selectAll("initChart").remove();
+    d3.selectAll(".initChart *").remove();
     d3.selectAll("#checkAverage").property("checked", false);
     d3.selectAll("#checkSort").property("checked", false);
     d3.csv("data/data.csv", function(error, data){
@@ -742,11 +751,9 @@ function pageInitMaster(){
         var yScale2 =   d3.scale.linear()
                             .domain([yMin, yMax])
                             .range([height - margin.top - margin.bottom - padding, padding]);
-;
 
-        var svg = d3.select("#column").append("initChart").append("svg")
-                                    .attr("width", width)
-                                    .attr("height", height);
+
+		var svg = d3.select(".initChart");
 
         //yAxis
         var yAxis = d3.svg.axis()
@@ -863,6 +870,8 @@ function pageInitMaster(){
         	.attr({
         		"class": "field_text",
         		"x": function(d,i){
+        			if(i!=new_xScale.length-1)
+        				return (new_xScale[i]+new_xScale[i+1])/2;
         			return new_xScale[i];
         		},
         		"y": function(d,i){
@@ -870,7 +879,7 @@ function pageInitMaster(){
         		},
         		"dy": function(d,i){
         			if(new_yScale[i] - 2*16 >0)
-        				return "-2em";
+        				return "-4em";
         		},
         		"fill": "#666666"
         	})
@@ -881,7 +890,7 @@ function pageInitMaster(){
         		return d.slice(0,2);
         	})
         	.style({
-        		"text-anchor": "start",
+        		"text-anchor": "middle",
         		"letter-spacing": "1px",
         		"cursor": "none",
         	});
@@ -1037,7 +1046,7 @@ function pageInitMaster(){
 }
 function pageChangeMaster(selectNumber) {
     selectNumber = selectNumber.slice(2);
-    d3.selectAll("changeChart").remove();
+    d3.selectAll(".changeChart *").remove();
 // d3 to visualize
     d3.csv("data/data_" + selectNumber +  ".csv", function(error, datasheet){
         if (error){
@@ -1072,9 +1081,7 @@ function pageChangeMaster(selectNumber) {
 
 
 
-        var svg = d3.select("#column2").append("changeChart").append("svg")
-                                    .attr("width", width)
-                                    .attr("height", height);
+        var svg = d3.select(".changeChart");
         svg.selectAll(".salary")
             .data(datasheet.sort(function(a, b){
 						return d3.ascending(a.master_salary, b.master_salary);
